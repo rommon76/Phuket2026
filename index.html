@@ -2027,20 +2027,19 @@
 <script>
   // ── WEATHER ─────────────────────────────────────────────────────────────
   // Trip dates: 7 Jul – 17 Jul 2026  (11 days, indices 0–10)
-  // Phuket coords: 7.8804°N, 98.3923°E
-  // Uses Open-Meteo archive API (free, no key) for historical data
-  // and Open-Meteo forecast API for future dates.
+  // ── WEATHER DATA ─────────────────────────────────────────────────────────
+  // Root cause of file:// failures: browsers send Origin: null from local files.
+  // Open-Meteo rejects null-origin CORS requests even with Access-Control-Allow-Origin: *.
+  // Fix: try direct fetch first (works from http:// / hosted), then fall back to
+  // JSONP via AllOrigins proxy — <script> tags bypass CORS entirely.
 
   const TRIP_DATES = [
     '2026-07-07','2026-07-08','2026-07-09','2026-07-10','2026-07-11',
     '2026-07-12','2026-07-13','2026-07-14','2026-07-15','2026-07-16','2026-07-17'
   ];
 
-  // Day 10 (17 Jul) is Melbourne/Sydney — use Melbourne weather
-  const LOCATIONS = TRIP_DATES.map((_, i) => i === 10
-    ? { lat: -37.8136, lon: 144.9631, city: 'Melbourne' }
-    : { lat: 7.8804,   lon: 98.3923,  city: 'Phuket' }
-  );
+  const PHUKET_WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=7.8804&longitude=98.3923&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Asia%2FBangkok';
+  const MELB_WX_URL   = 'https://api.open-meteo.com/v1/forecast?latitude=-37.8136&longitude=144.9631&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Australia%2FMelbourne';
 
   function wmoToEmoji(code) {
     if (code === 0)           return { icon: '☀️',  desc: 'Clear sky' };
@@ -2108,76 +2107,100 @@
     if (btn) btn.disabled = false;
   }
 
-  function refreshWeather() {
-    setWeatherLoading();
-    loadWeather();
+  function refreshWeather() { setWeatherLoading(); loadWeather(); }
+
+  // ── Process and render weather data once retrieved ────────────────────
+  function processWeatherData(phuket, melb) {
+    TRIP_DATES.forEach((tripDate, panelIdx) => {
+      const data   = panelIdx < 10 ? phuket : melb;
+      const dayIdx = data.daily.time.indexOf(tripDate);
+      if (dayIdx !== -1) {
+        renderWeather(panelIdx, {
+          max:  data.daily.temperature_2m_max[dayIdx],
+          min:  data.daily.temperature_2m_min[dayIdx],
+          rain: data.daily.precipitation_sum[dayIdx] ?? 0,
+          code: data.daily.weather_code[dayIdx],
+          wind: data.daily.wind_speed_10m_max[dayIdx]
+        });
+      } else {
+        const bar = document.getElementById('wx-' + panelIdx);
+        if (bar) { bar.classList.remove('loading'); bar.innerHTML = '<span class="wx-error">🌡️ Forecast not yet available — check back closer to the date</span>'; }
+      }
+    });
+    setWeatherTimestamp();
   }
 
-  async function loadWeather() {
-    // Try main API, then EU mirror as fallback
-    const bases = [
-      'https://api.open-meteo.com/v1/forecast',
-      'https://eu-api.open-meteo.com/v1/forecast'
-    ];
-
-    let lastError = '';
-    for (const base of bases) {
-      try {
-        const phuketUrl = `${base}?latitude=7.8804&longitude=98.3923&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Asia%2FBangkok`;
-        const melbUrl   = `${base}?latitude=-37.8136&longitude=144.9631&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Australia%2FMelbourne`;
-
-        const [phuketRes, melbRes] = await Promise.all([
-          fetch(phuketUrl),
-          fetch(melbUrl)
-        ]);
-
-        if (!phuketRes.ok) throw new Error(`HTTP ${phuketRes.status} from ${base}`);
-        if (!melbRes.ok)   throw new Error(`HTTP ${melbRes.status} from ${base}`);
-
-        const phuket = await phuketRes.json();
-        const melb   = await melbRes.json();
-
-        // Catch API-level errors (Open-Meteo returns {error:true, reason:"..."})
-        if (phuket.error) throw new Error(`Phuket: ${phuket.reason || 'API error'}`);
-        if (melb.error)   throw new Error(`Melb: ${melb.reason   || 'API error'}`);
-        if (!phuket.daily || !melb.daily) throw new Error('Missing daily data in response');
-
-        // Match each panel's trip date to the API response by date string
-        TRIP_DATES.forEach((tripDate, panelIdx) => {
-          const data   = panelIdx < 10 ? phuket : melb;
-          const dayIdx = data.daily.time.indexOf(tripDate);
-          if (dayIdx !== -1) {
-            renderWeather(panelIdx, {
-              max:  data.daily.temperature_2m_max[dayIdx],
-              min:  data.daily.temperature_2m_min[dayIdx],
-              rain: data.daily.precipitation_sum[dayIdx] ?? 0,
-              code: data.daily.weather_code[dayIdx],
-              wind: data.daily.wind_speed_10m_max[dayIdx]
-            });
-          } else {
-            const bar = document.getElementById('wx-' + panelIdx);
-            if (bar) { bar.classList.remove('loading'); bar.innerHTML = '<span class="wx-error">🌡️ Forecast not yet available — check back closer to the date</span>'; }
-          }
-        });
-
-        setWeatherTimestamp();
-        return; // success — stop trying mirrors
-
-      } catch (e) {
-        lastError = e.message;
-        console.warn(`Weather fetch failed (${base}):`, e);
-      }
-    }
-
-    // All mirrors failed
+  function showWeatherError(msg) {
     for (let i = 0; i <= 10; i++) {
       const bar = document.getElementById('wx-' + i);
-      if (bar) { bar.classList.remove('loading'); bar.innerHTML = `<span class="wx-error">🌡️ Weather unavailable (${lastError}) — tap Refresh to retry</span>`; }
+      if (bar) { bar.classList.remove('loading'); bar.innerHTML = `<span class="wx-error">🌡️ Weather unavailable — tap Refresh to retry</span>`; }
     }
     const btn = document.getElementById('wx-refresh-btn');
     const ts  = document.getElementById('wx-last-updated');
-    if (ts)  ts.textContent = `Failed: ${lastError}`;
+    if (ts)  ts.textContent = `Failed: ${msg} — click Refresh to retry`;
     if (btn) btn.disabled = false;
+    console.warn('Weather error:', msg);
+  }
+
+  // ── JSONP loader — bypasses CORS/null-origin restrictions from file:// ──
+  function jsonpLoad(url, callbackName) {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        delete window[callbackName];
+        reject(new Error('JSONP timeout'));
+      }, 15000);
+
+      window[callbackName] = function(response) {
+        clearTimeout(timer);
+        delete window[callbackName];
+        try {
+          const data = (typeof response.contents === 'string')
+            ? JSON.parse(response.contents)
+            : response.contents;
+          resolve(data);
+        } catch(e) { reject(new Error('JSONP parse error')); }
+      };
+
+      const s = document.createElement('script');
+      s.src = 'https://api.allorigins.win/get?callback=' + callbackName + '&url=' + encodeURIComponent(url);
+      s.onerror = () => { clearTimeout(timer); delete window[callbackName]; reject(new Error('JSONP script load error')); };
+      document.head.appendChild(s);
+    });
+  }
+
+  // ── Main weather loader — two methods, auto-fallback ─────────────────
+  async function loadWeather() {
+    // Method 1: Direct fetch (works when served over http:// or if browser allows null-origin CORS)
+    try {
+      const opts = { credentials: 'omit' };
+      const [r1, r2] = await Promise.all([
+        fetch(PHUKET_WX_URL, opts),
+        fetch(MELB_WX_URL,   opts)
+      ]);
+      if (!r1.ok) throw new Error('HTTP ' + r1.status);
+      if (!r2.ok) throw new Error('HTTP ' + r2.status);
+      const phuket = await r1.json();
+      const melb   = await r2.json();
+      if (phuket.error) throw new Error(phuket.reason || 'API error');
+      if (!phuket.daily || !melb.daily) throw new Error('No daily data');
+      processWeatherData(phuket, melb);
+      return;
+    } catch(e1) {
+      console.warn('Direct fetch failed (' + e1.message + ') — trying JSONP proxy...');
+    }
+
+    // Method 2: JSONP via AllOrigins proxy — <script> tags ignore CORS/null-origin restrictions
+    try {
+      const [phuket, melb] = await Promise.all([
+        jsonpLoad(PHUKET_WX_URL, '_wxPhuket'),
+        jsonpLoad(MELB_WX_URL,   '_wxMelb')
+      ]);
+      if (phuket.error) throw new Error(phuket.reason || 'API error');
+      if (!phuket.daily || !melb.daily) throw new Error('No daily data');
+      processWeatherData(phuket, melb);
+    } catch(e2) {
+      showWeatherError(e2.message);
+    }
   }
 
   loadWeather();

@@ -1392,7 +1392,7 @@
     <div class="day-header green-hdr">
       <div class="day-big-num">07</div>
       <div class="day-title">
-        <h2>Elephant Sanctuary Day</h2>
+        <h2>Elephant Sanctuary + Carnival Magic</h2>
         <p>Sunday, 13 July 2026</p>
       </div>
       <div class="day-emoji-big">🐘</div>
@@ -2114,37 +2114,33 @@
   }
 
   async function loadWeather() {
-    // Group by location to batch API calls (Phuket = indices 0-9, Melbourne = index 10)
-    const phuketDates = TRIP_DATES.slice(0, 10);
-    const melbDates   = [TRIP_DATES[10]];
-
     try {
       const [phuketRes, melbRes] = await Promise.all([
-        fetch(`https://api.open-meteo.com/v1/forecast?latitude=7.8804&longitude=98.3923&start_date=${phuketDates[0]}&end_date=${phuketDates[phuketDates.length-1]}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Asia%2FBangkok`),
-        fetch(`https://api.open-meteo.com/v1/forecast?latitude=-37.8136&longitude=144.9631&start_date=${melbDates[0]}&end_date=${melbDates[0]}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Australia%2FMelbourne`)
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=7.8804&longitude=98.3923&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Asia%2FBangkok`),
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=-37.8136&longitude=144.9631&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Australia%2FMelbourne`)
       ]);
+
+      if (!phuketRes.ok || !melbRes.ok) throw new Error(`API error: ${phuketRes.status} / ${melbRes.status}`);
 
       const phuket = await phuketRes.json();
       const melb   = await melbRes.json();
 
-      // Populate Phuket days (0–9)
-      phuket.daily.time.forEach((date, i) => {
-        renderWeather(i, {
-          max:  phuket.daily.temperature_2m_max[i],
-          min:  phuket.daily.temperature_2m_min[i],
-          rain: phuket.daily.precipitation_sum[i] ?? 0,
-          code: phuket.daily.weather_code[i],
-          wind: phuket.daily.wind_speed_10m_max[i]
-        });
-      });
-
-      // Populate Melbourne day (10)
-      renderWeather(10, {
-        max:  melb.daily.temperature_2m_max[0],
-        min:  melb.daily.temperature_2m_min[0],
-        rain: melb.daily.precipitation_sum[0] ?? 0,
-        code: melb.daily.weather_code[0],
-        wind: melb.daily.wind_speed_10m_max[0]
+      // Match each panel's trip date to the API response by date string
+      TRIP_DATES.forEach((tripDate, panelIdx) => {
+        const data   = panelIdx < 10 ? phuket : melb;
+        const dayIdx = data.daily.time.indexOf(tripDate);
+        if (dayIdx !== -1) {
+          renderWeather(panelIdx, {
+            max:  data.daily.temperature_2m_max[dayIdx],
+            min:  data.daily.temperature_2m_min[dayIdx],
+            rain: data.daily.precipitation_sum[dayIdx] ?? 0,
+            code: data.daily.weather_code[dayIdx],
+            wind: data.daily.wind_speed_10m_max[dayIdx]
+          });
+        } else {
+          const bar = document.getElementById('wx-' + panelIdx);
+          if (bar) { bar.classList.remove('loading'); bar.innerHTML = '<span class="wx-error">🌡️ Forecast not yet available for this date</span>'; }
+        }
       });
 
       setWeatherTimestamp();
@@ -2153,7 +2149,7 @@
       console.warn('Weather fetch failed:', e);
       for (let i = 0; i <= 10; i++) {
         const bar = document.getElementById('wx-' + i);
-        if (bar) { bar.classList.remove('loading'); bar.innerHTML = '<span class="wx-error">🌡️ Weather data unavailable — check your internet connection</span>'; }
+        if (bar) { bar.classList.remove('loading'); bar.innerHTML = '<span class="wx-error">🌡️ Weather unavailable — tap Refresh to retry</span>'; }
       }
       const btn = document.getElementById('wx-refresh-btn');
       const ts  = document.getElementById('wx-last-updated');
@@ -2243,10 +2239,10 @@
       }
     });
 
-    // Mark & open today
+    // Mark today (highlight border) but keep closed
     if (present.length > 0) {
       present.forEach(p => {
-        p.classList.add('acc-today', 'acc-open');
+        p.classList.add('acc-today');
         const h2 = p.querySelector('.day-title h2');
         if (h2 && !h2.querySelector('.today-badge')) {
           const badge = document.createElement('span');
@@ -2255,13 +2251,8 @@
           h2.appendChild(badge);
         }
       });
-    } else if (future.length > 0) {
-      // Trip hasn't started yet — open the first full activity day (skip arrival day at index 0)
-      (future[1] || future[0]).classList.add('acc-open');
-    } else {
-      // Trip is over — open last day
-      if (past.length > 0) past[past.length - 1].classList.add('acc-open');
     }
+    // All days stay closed on load — user opens manually
   }
 
   // Run after DOM is ready

@@ -190,15 +190,15 @@
   /* DAY PANEL */
   .day-panels { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
   .day-panel {
-    display: none;
+    display: block;
     background: white;
-    border-radius: 0 16px 16px 16px;
+    border-radius: 16px;
+    margin-bottom: 12px;
     box-shadow: var(--shadow);
     overflow: hidden;
     animation: fadeIn 0.3s ease;
   }
-  .day-panel.active { display: block; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+   }
 
   .day-header {
     background: linear-gradient(135deg, var(--coral) 0%, var(--orange) 100%);
@@ -213,7 +213,7 @@
   .day-header.purple-hdr { background: linear-gradient(135deg, var(--purple) 0%, #C77DFF 100%); }
   .day-header.green-hdr { background: linear-gradient(135deg, #2D9B6F 0%, var(--teal) 100%); }
   .day-header.pink-hdr { background: linear-gradient(135deg, var(--pink) 0%, #FF9F1C 100%); }
-  .day-header.navy-hdr { background: linear-gradient(135deg, var(--navy) 0%, #444 100%); }
+  .day-header.navy-hdr { background: linear-gradient(135deg, #1565C0 0%, #0097A7 100%); }
 
   .day-big-num {
     font-family: 'Pacifico', cursive;
@@ -227,7 +227,7 @@
     margin-bottom: 4px;
   }
   .day-title p { font-size: 0.9em; opacity: 0.88; }
-  .day-emoji-big { font-size: 2.5em; margin-left: auto; }
+  .day-emoji-big { font-size: 2.5em; position: absolute; right: 52px; top: 50%; transform: translateY(-50%); }
 
   /* TIMELINE */
   .timeline {
@@ -556,21 +556,7 @@
 </div>
 
 <!-- TABS -->
-<div class="tabs-wrapper">
-  <div class="tabs-scroll" id="tabRow">
-    <button class="tab-btn active" onclick="showDay(0)"><span class="day-emoji">✈️</span><span class="day-label">Tue 7 Jul</span>Travel Day</button>
-    <button class="tab-btn" onclick="showDay(1)"><span class="day-emoji">🏖️</span><span class="day-label">Wed 8 Jul</span>Arrive!</button>
-    <button class="tab-btn" onclick="showDay(2)"><span class="day-emoji">🐘</span><span class="day-label">Thu 9 Jul</span>Elephants</button>
-    <button class="tab-btn" onclick="showDay(3)"><span class="day-emoji">⛵</span><span class="day-label">Fri 10 Jul</span>Phi Phi</button>
-    <button class="tab-btn" onclick="showDay(4)"><span class="day-emoji">🎪</span><span class="day-label">Sat 11 Jul</span>Fantasea</button>
-    <button class="tab-btn" onclick="showDay(5)"><span class="day-emoji">🙏</span><span class="day-label">Sun 12 Jul</span>Buddha+Boxing</button>
-    <button class="tab-btn" onclick="showDay(6)"><span class="day-emoji">🏍️</span><span class="day-label">Mon 13 Jul</span>ATV/Jungle</button>
-    <button class="tab-btn" onclick="showDay(7)"><span class="day-emoji">🛍️</span><span class="day-label">Tue 14 Jul</span>Beach+Ping Pong</button>
-    <button class="tab-btn" onclick="showDay(8)"><span class="day-emoji">🌅</span><span class="day-label">Wed 15 Jul</span>Last Day</button>
-    <button class="tab-btn" onclick="showDay(9)"><span class="day-emoji">👋</span><span class="day-label">Thu 16 Jul</span>Departure</button>
-    <button class="tab-btn" onclick="showDay(10)"><span class="day-emoji">🏠</span><span class="day-label">Fri 17 Jul</span>Home!</button>
-  </div>
-</div>
+
 
 <!-- DAY PANELS -->
 <div class="day-panels">

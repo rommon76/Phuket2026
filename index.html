@@ -195,15 +195,15 @@
   /* Chevron */
   .acc-chevron {
     position: absolute;
-    right: 24px;
-    top: 50%;
-    transform: translateY(-50%) rotate(0deg);
-    font-size: 1.1em;
-    opacity: 0.7;
+    right: 16px;
+    bottom: 10px;
+    transform: rotate(0deg);
+    font-size: 0.85em;
+    opacity: 0.6;
     transition: transform 0.25s;
   }
   .day-panel.acc-open .acc-chevron {
-    transform: translateY(-50%) rotate(180deg);
+    transform: rotate(180deg);
   }
 
   /* TODAY badge */
@@ -2114,48 +2114,70 @@
   }
 
   async function loadWeather() {
-    try {
-      const [phuketRes, melbRes] = await Promise.all([
-        fetch(`https://api.open-meteo.com/v1/forecast?latitude=7.8804&longitude=98.3923&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Asia%2FBangkok`),
-        fetch(`https://api.open-meteo.com/v1/forecast?latitude=-37.8136&longitude=144.9631&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Australia%2FMelbourne`)
-      ]);
+    // Try main API, then EU mirror as fallback
+    const bases = [
+      'https://api.open-meteo.com/v1/forecast',
+      'https://eu-api.open-meteo.com/v1/forecast'
+    ];
 
-      if (!phuketRes.ok || !melbRes.ok) throw new Error(`API error: ${phuketRes.status} / ${melbRes.status}`);
+    let lastError = '';
+    for (const base of bases) {
+      try {
+        const phuketUrl = `${base}?latitude=7.8804&longitude=98.3923&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Asia%2FBangkok`;
+        const melbUrl   = `${base}?latitude=-37.8136&longitude=144.9631&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Australia%2FMelbourne`;
 
-      const phuket = await phuketRes.json();
-      const melb   = await melbRes.json();
+        const [phuketRes, melbRes] = await Promise.all([
+          fetch(phuketUrl),
+          fetch(melbUrl)
+        ]);
 
-      // Match each panel's trip date to the API response by date string
-      TRIP_DATES.forEach((tripDate, panelIdx) => {
-        const data   = panelIdx < 10 ? phuket : melb;
-        const dayIdx = data.daily.time.indexOf(tripDate);
-        if (dayIdx !== -1) {
-          renderWeather(panelIdx, {
-            max:  data.daily.temperature_2m_max[dayIdx],
-            min:  data.daily.temperature_2m_min[dayIdx],
-            rain: data.daily.precipitation_sum[dayIdx] ?? 0,
-            code: data.daily.weather_code[dayIdx],
-            wind: data.daily.wind_speed_10m_max[dayIdx]
-          });
-        } else {
-          const bar = document.getElementById('wx-' + panelIdx);
-          if (bar) { bar.classList.remove('loading'); bar.innerHTML = '<span class="wx-error">🌡️ Forecast not yet available for this date</span>'; }
-        }
-      });
+        if (!phuketRes.ok) throw new Error(`HTTP ${phuketRes.status} from ${base}`);
+        if (!melbRes.ok)   throw new Error(`HTTP ${melbRes.status} from ${base}`);
 
-      setWeatherTimestamp();
+        const phuket = await phuketRes.json();
+        const melb   = await melbRes.json();
 
-    } catch (e) {
-      console.warn('Weather fetch failed:', e);
-      for (let i = 0; i <= 10; i++) {
-        const bar = document.getElementById('wx-' + i);
-        if (bar) { bar.classList.remove('loading'); bar.innerHTML = '<span class="wx-error">🌡️ Weather unavailable — tap Refresh to retry</span>'; }
+        // Catch API-level errors (Open-Meteo returns {error:true, reason:"..."})
+        if (phuket.error) throw new Error(`Phuket: ${phuket.reason || 'API error'}`);
+        if (melb.error)   throw new Error(`Melb: ${melb.reason   || 'API error'}`);
+        if (!phuket.daily || !melb.daily) throw new Error('Missing daily data in response');
+
+        // Match each panel's trip date to the API response by date string
+        TRIP_DATES.forEach((tripDate, panelIdx) => {
+          const data   = panelIdx < 10 ? phuket : melb;
+          const dayIdx = data.daily.time.indexOf(tripDate);
+          if (dayIdx !== -1) {
+            renderWeather(panelIdx, {
+              max:  data.daily.temperature_2m_max[dayIdx],
+              min:  data.daily.temperature_2m_min[dayIdx],
+              rain: data.daily.precipitation_sum[dayIdx] ?? 0,
+              code: data.daily.weather_code[dayIdx],
+              wind: data.daily.wind_speed_10m_max[dayIdx]
+            });
+          } else {
+            const bar = document.getElementById('wx-' + panelIdx);
+            if (bar) { bar.classList.remove('loading'); bar.innerHTML = '<span class="wx-error">🌡️ Forecast not yet available — check back closer to the date</span>'; }
+          }
+        });
+
+        setWeatherTimestamp();
+        return; // success — stop trying mirrors
+
+      } catch (e) {
+        lastError = e.message;
+        console.warn(`Weather fetch failed (${base}):`, e);
       }
-      const btn = document.getElementById('wx-refresh-btn');
-      const ts  = document.getElementById('wx-last-updated');
-      if (ts)  ts.textContent = 'Failed to load — click Refresh to try again';
-      if (btn) btn.disabled = false;
     }
+
+    // All mirrors failed
+    for (let i = 0; i <= 10; i++) {
+      const bar = document.getElementById('wx-' + i);
+      if (bar) { bar.classList.remove('loading'); bar.innerHTML = `<span class="wx-error">🌡️ Weather unavailable (${lastError}) — tap Refresh to retry</span>`; }
+    }
+    const btn = document.getElementById('wx-refresh-btn');
+    const ts  = document.getElementById('wx-last-updated');
+    if (ts)  ts.textContent = `Failed: ${lastError}`;
+    if (btn) btn.disabled = false;
   }
 
   loadWeather();

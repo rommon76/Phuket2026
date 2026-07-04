@@ -149,56 +149,97 @@
     flex-shrink: 0;
   }
 
-  /* TABS */
-  .tabs-wrapper {
+  /* ACCORDION */
+  .day-panels {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 20px;
-  }
-  .tabs-scroll {
+    padding: 0 20px 60px;
     display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: none;
+    flex-direction: column;
+    gap: 12px;
   }
-  .tabs-scroll::-webkit-scrollbar { display: none; }
-  .tab-btn {
-    flex-shrink: 0;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 12px 12px 0 0;
-    background: rgba(255,255,255,0.6);
-    cursor: pointer;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    font-size: 0.85em;
-    color: #777;
-    transition: all 0.2s;
-    border-bottom: 3px solid transparent;
-  }
-  .tab-btn:hover { background: white; color: var(--coral); }
-  .tab-btn.active {
-    background: white;
-    color: var(--coral);
-    border-bottom-color: var(--coral);
-    box-shadow: 0 -2px 12px rgba(255,107,107,0.15);
-  }
-  .tab-btn .day-label { display: block; font-size: 0.75em; opacity: 0.75; }
-  .tab-btn .day-emoji { font-size: 1.1em; }
-
-  /* DAY PANEL */
-  .day-panels { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
   .day-panel {
-    display: none;
+    display: block;
     background: white;
-    border-radius: 0 16px 16px 16px;
+    border-radius: 16px;
     box-shadow: var(--shadow);
     overflow: hidden;
-    animation: fadeIn 0.3s ease;
+    transition: box-shadow 0.2s;
   }
-  .day-panel.active { display: block; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+  .day-panel.acc-today {
+    box-shadow: 0 0 0 3px var(--coral), var(--shadow);
+  }
+  .day-panel.acc-past {
+    opacity: 0.72;
+  }
+  .day-panel.acc-past .day-header { filter: grayscale(30%); }
+
+  /* Collapsible body */
+  .acc-body {
+    display: none;
+  }
+  .day-panel.acc-open .acc-body {
+    display: block;
+    animation: fadeIn 0.25s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+
+  /* Header becomes clickable */
+  .day-header {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+  }
+  .day-header:hover { filter: brightness(1.04); }
+
+  /* Chevron */
+  .acc-chevron {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    font-size: 1.1em;
+    opacity: 0.7;
+    transition: transform 0.25s;
+  }
+  .day-panel.acc-open .acc-chevron {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  /* TODAY badge */
+  .today-badge {
+    display: inline-block;
+    background: white;
+    color: var(--coral);
+    font-size: 0.65em;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 10px;
+    padding: 3px 8px;
+    margin-left: 10px;
+    vertical-align: middle;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.6; }
+  }
+
+  /* Past label */
+  .past-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.75);
+    font-size: 0.62em;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 10px;
+    padding: 3px 8px;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
 
   .day-header {
     background: linear-gradient(135deg, var(--coral) 0%, var(--orange) 100%);
@@ -539,22 +580,6 @@
   <span id="wx-last-updated">Loading weather data…</span>
 </div>
 
-<!-- TABS -->
-<div class="tabs-wrapper">
-  <div class="tabs-scroll" id="tabRow">
-    <button class="tab-btn active" onclick="showDay(0)"><span class="day-emoji">✈️</span><span class="day-label">Mon 7 Jul</span>Travel Day</button>
-    <button class="tab-btn" onclick="showDay(1)"><span class="day-emoji">🏖️</span><span class="day-label">Tue 8 Jul</span>Arrive!</button>
-    <button class="tab-btn" onclick="showDay(2)"><span class="day-emoji">⛵</span><span class="day-label">Wed 9 Jul</span>Charter</button>
-    <button class="tab-btn" onclick="showDay(3)"><span class="day-emoji">🏝️</span><span class="day-label">Thu 10 Jul</span>Phi Phi</button>
-    <button class="tab-btn" onclick="showDay(4)"><span class="day-emoji">🥊</span><span class="day-label">Fri 11 Jul</span>Boxing Night</button>
-    <button class="tab-btn" onclick="showDay(5)"><span class="day-emoji">🎪</span><span class="day-label">Sat 12 Jul</span>Buddha+Fantasea</button>
-    <button class="tab-btn" onclick="showDay(6)"><span class="day-emoji">🐘</span><span class="day-label">Sun 13 Jul</span>Elephants</button>
-    <button class="tab-btn" onclick="showDay(7)"><span class="day-emoji">🏍️</span><span class="day-label">Mon 14 Jul</span>ATV/Jungle</button>
-    <button class="tab-btn" onclick="showDay(8)"><span class="day-emoji">🛍️</span><span class="day-label">Tue 15 Jul</span>Last Day</button>
-    <button class="tab-btn" onclick="showDay(9)"><span class="day-emoji">👋</span><span class="day-label">Wed 16 Jul</span>Departure</button>
-    <button class="tab-btn" onclick="showDay(10)"><span class="day-emoji">🏠</span><span class="day-label">Thu 17 Jul</span>Home!</button>
-  </div>
-</div>
 
 <!-- DAY PANELS -->
 <div class="day-panels">
@@ -2064,20 +2089,108 @@
   loadWeather();
   // ────────────────────────────────────────────────────────────────────────
 
-  function showDay(index) {
-    document.querySelectorAll('.day-panel').forEach((p, i) => {
-      p.classList.toggle('active', i === index);
-    });
-    document.querySelectorAll('.tab-btn').forEach((b, i) => {
-      b.classList.toggle('active', i === index);
-    });
-    // Scroll tab into view
-    const tabs = document.getElementById('tabRow');
-    const btn = tabs.querySelectorAll('.tab-btn')[index];
-    if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    // Scroll to top of panels
-    document.querySelector('.day-panels').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // ── ACCORDION + DAY REORDER ────────────────────────────────────────────
+  const DAY_DATES = [
+    '2025-07-07','2025-07-08','2025-07-09','2025-07-10','2025-07-11',
+    '2025-07-12','2025-07-13','2025-07-14','2025-07-15','2025-07-16','2025-07-17'
+  ];
+
+  function toggleDay(panel) {
+    panel.classList.toggle('acc-open');
+    panel.querySelector('.day-header').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
+
+  function initAccordion() {
+    const container = document.querySelector('.day-panels');
+    const panels    = Array.from(document.querySelectorAll('.day-panel'));
+
+    panels.forEach((panel, i) => {
+      // Tag with date
+      panel.dataset.date = DAY_DATES[i];
+
+      // Wrap highlights + timeline inside .acc-body
+      const body = document.createElement('div');
+      body.className = 'acc-body';
+      const highlights = panel.querySelector('.day-highlights');
+      const timeline   = panel.querySelector('.timeline');
+      if (highlights) body.appendChild(highlights);
+      if (timeline)   body.appendChild(timeline);
+      panel.appendChild(body);
+
+      // Make header clickable + add chevron
+      const header = panel.querySelector('.day-header');
+      if (header) {
+        const chev = document.createElement('span');
+        chev.className = 'acc-chevron';
+        chev.textContent = '▼';
+        header.appendChild(chev);
+        header.addEventListener('click', () => toggleDay(panel));
+      }
+    });
+
+    reorderDays(panels, container);
+  }
+
+  function reorderDays(panels, container) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const past = [], present = [], future = [];
+
+    panels.forEach(panel => {
+      const d = new Date(panel.dataset.date);
+      d.setHours(0, 0, 0, 0);
+      const diff = d - today;
+      if (diff < 0)      past.push(panel);
+      else if (diff === 0) present.push(panel);
+      else               future.push(panel);
+    });
+
+    // Render order: today first, then future days, then past days at bottom
+    const ordered = [...present, ...future, ...past];
+    ordered.forEach(p => container.appendChild(p));
+
+    // Reset states
+    panels.forEach(p => {
+      p.classList.remove('acc-open', 'acc-today', 'acc-past');
+    });
+
+    // Mark past
+    past.forEach(p => {
+      p.classList.add('acc-past');
+      const h2 = p.querySelector('.day-title h2');
+      if (h2 && !h2.querySelector('.past-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'past-badge';
+        badge.textContent = 'Completed';
+        h2.appendChild(badge);
+      }
+    });
+
+    // Mark & open today
+    if (present.length > 0) {
+      present.forEach(p => {
+        p.classList.add('acc-today', 'acc-open');
+        const h2 = p.querySelector('.day-title h2');
+        if (h2 && !h2.querySelector('.today-badge')) {
+          const badge = document.createElement('span');
+          badge.className = 'today-badge';
+          badge.textContent = '📍 Today';
+          h2.appendChild(badge);
+        }
+      });
+    } else if (future.length > 0) {
+      // Trip hasn't started yet — open the first upcoming day
+      future[0].classList.add('acc-open');
+    } else {
+      // Trip is over — open last day
+      if (past.length > 0) past[past.length - 1].classList.add('acc-open');
+    }
+  }
+
+  // Run after DOM is ready
+  initAccordion();
+  // ────────────────────────────────────────────────────────────────────────
 </script>
 
 </body>

@@ -1,0 +1,2349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌴 Phuket Family Adventure — July 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap');
+
+  :root {
+    --coral:     #FF6B6B;
+    --coral-dk:  #E84545;
+    --teal:      #00C9B1;
+    --teal-dk:   #00A693;
+    --sand:      #FFF4E0;
+    --sand-dk:   #FFE8B2;
+    --yellow:    #FFD166;
+    --sky:       #87CEEB;
+    --purple:    #9B5DE5;
+    --green:     #2EC4B6;
+    --orange:    #FF9F1C;
+    --pink:      #F15BB5;
+    --navy:      #1A1A2E;
+    --text:      #3D3D3D;
+    --white:     #FFFFFF;
+    --gray:      #F5F5F5;
+    --shadow:    0 4px 20px rgba(0,0,0,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--sand);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF9F1C 40%, #00C9B1 100%);
+    padding: 50px 20px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '🌊';
+    font-size: 200px;
+    position: absolute;
+    bottom: -40px;
+    left: -20px;
+    opacity: 0.08;
+  }
+  .hero::after {
+    content: '🌴';
+    font-size: 160px;
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    opacity: 0.1;
+  }
+  .hero h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3em;
+    color: white;
+    text-shadow: 2px 4px 12px rgba(0,0,0,0.25);
+    margin-bottom: 8px;
+  }
+  .hero .subtitle {
+    font-size: 1.2em;
+    color: rgba(255,255,255,0.92);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .hero .dates {
+    margin-top: 12px;
+    display: inline-block;
+    background: rgba(255,255,255,0.25);
+    border-radius: 30px;
+    padding: 8px 24px;
+    color: white;
+    font-weight: 800;
+    font-size: 1em;
+    backdrop-filter: blur(4px);
+  }
+
+  /* INFO CARDS */
+  .info-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    max-width: 1100px;
+    margin: -28px auto 30px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+  }
+  .info-card {
+    flex: 1;
+    min-width: 220px;
+    background: white;
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--coral);
+  }
+  .info-card.teal { border-top-color: var(--teal); }
+  .info-card.yellow { border-top-color: var(--yellow); }
+  .info-card h3 {
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    margin-bottom: 8px;
+  }
+  .info-card p {
+    font-size: 0.95em;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.5;
+  }
+  .info-card .icon { font-size: 1.5em; margin-bottom: 6px; display: block; }
+
+  /* LEGEND */
+  .legend {
+    max-width: 1100px;
+    margin: 0 auto 20px;
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82em;
+    font-weight: 700;
+    background: white;
+    border-radius: 20px;
+    padding: 5px 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ACCORDION */
+  .day-panels {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .day-panel {
+    display: block;
+    background: white;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .day-panel.acc-today {
+    box-shadow: 0 0 0 3px var(--coral), var(--shadow);
+  }
+  .day-panel.acc-past {
+    opacity: 0.72;
+  }
+  .day-panel.acc-past .day-header { filter: grayscale(30%); }
+
+  /* Collapsible body */
+  .acc-body {
+    display: none;
+  }
+  .day-panel.acc-open .acc-body {
+    display: block;
+    animation: fadeIn 0.25s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+
+  /* Header becomes clickable */
+  .day-header {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+  }
+  .day-header:hover { filter: brightness(1.04); }
+
+  /* Chevron */
+  .acc-chevron {
+    position: absolute;
+    right: 16px;
+    bottom: 10px;
+    transform: rotate(0deg);
+    font-size: 0.85em;
+    opacity: 0.6;
+    transition: transform 0.25s;
+  }
+  .day-panel.acc-open .acc-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* TODAY badge */
+  .today-badge {
+    display: inline-block;
+    background: white;
+    color: var(--coral);
+    font-size: 0.65em;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 10px;
+    padding: 3px 8px;
+    margin-left: 10px;
+    vertical-align: middle;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.6; }
+  }
+
+  /* Past label */
+  .past-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.75);
+    font-size: 0.62em;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 10px;
+    padding: 3px 8px;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+
+  .day-header {
+    background: linear-gradient(135deg, var(--coral) 0%, var(--orange) 100%);
+    padding: 24px 28px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .day-header.teal-hdr { background: linear-gradient(135deg, var(--teal-dk) 0%, #00E5CC 100%); }
+  .day-header.yellow-hdr { background: linear-gradient(135deg, var(--orange) 0%, var(--yellow) 100%); }
+  .day-header.purple-hdr { background: linear-gradient(135deg, var(--purple) 0%, #C77DFF 100%); }
+  .day-header.green-hdr { background: linear-gradient(135deg, #2D9B6F 0%, var(--teal) 100%); }
+  .day-header.pink-hdr { background: linear-gradient(135deg, var(--pink) 0%, #FF9F1C 100%); }
+  .day-header.navy-hdr { background: linear-gradient(135deg, var(--navy) 0%, #444 100%); }
+
+  .day-big-num {
+    font-family: 'Pacifico', cursive;
+    font-size: 3.5em;
+    opacity: 0.25;
+    line-height: 1;
+  }
+  .day-title h2 {
+    font-size: 1.4em;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .day-title p { font-size: 0.9em; opacity: 0.88; }
+  .day-emoji-big { font-size: 2.5em; margin-left: auto; }
+
+  /* TIMELINE */
+  .timeline {
+    padding: 24px 28px;
+  }
+  .timeline-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 0;
+    position: relative;
+  }
+  .timeline-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 52px;
+    top: 44px;
+    bottom: -4px;
+    width: 2px;
+    background: #EEE;
+    z-index: 0;
+  }
+  .time-col {
+    min-width: 70px;
+    text-align: right;
+    padding-top: 12px;
+    flex-shrink: 0;
+  }
+  .time-col span {
+    font-size: 0.78em;
+    font-weight: 800;
+    color: #AAA;
+    white-space: nowrap;
+  }
+  .dot-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 3px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+    margin-top: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  .content-col {
+    flex: 1;
+    padding: 8px 0 20px;
+  }
+  .event-card {
+    border-radius: 12px;
+    padding: 14px 16px;
+    position: relative;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .event-card:hover {
+    transform: translateX(3px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+  .event-card h4 { font-size: 0.95em; font-weight: 800; margin-bottom: 4px; }
+  .event-card p { font-size: 0.85em; line-height: 1.55; opacity: 0.9; }
+  .event-card .tag {
+    display: inline-block;
+    font-size: 0.7em;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 10px;
+    padding: 2px 8px;
+    margin-bottom: 6px;
+    opacity: 0.85;
+  }
+  .event-card .tip {
+    margin-top: 8px;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 8px;
+    font-size: 0.8em;
+    font-style: italic;
+  }
+  .tip-icon { font-style: normal; }
+
+  /* TYPE COLOURS */
+  .type-travel   { background: #E8F4FD; }  .dot-travel   { background: #5BA4CF; }  .tag-travel   { background: #5BA4CF20; color: #2E6FAA; }
+  .type-hotel    { background: #FFF8E1; }  .dot-hotel    { background: var(--yellow); }  .tag-hotel    { background: #FFD16620; color: #B8860B; }
+  .type-food     { background: #FFF0E6; }  .dot-food     { background: var(--orange); }  .tag-food     { background: #FF9F1C20; color: #C07000; }
+  .type-activity { background: #E8FDF8; }  .dot-activity { background: var(--teal); }  .tag-activity { background: #00C9B120; color: #008B7A; }
+  .type-relax    { background: #F0F4FF; }  .dot-relax    { background: #7B9CF0; }  .tag-relax    { background: #7B9CF020; color: #4560C8; }
+  .type-night    { background: #F5E8FF; }  .dot-night    { background: var(--purple); }  .tag-night    { background: #9B5DE520; color: #6A30B0; }
+  .type-transit  { background: #F0FAF0; }  .dot-transit  { background: #4CAF50; }  .tag-transit  { background: #4CAF5020; color: #2E7D32; }
+
+  /* FLIGHT CARD SPECIAL */
+  .flight-card {
+    background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+    color: white;
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .flight-card .fl-from, .flight-card .fl-to {
+    font-weight: 800;
+    font-size: 0.95em;
+  }
+  .flight-card .fl-code {
+    font-size: 0.75em;
+    opacity: 0.65;
+    margin-top: 2px;
+  }
+  .flight-card .fl-arrow {
+    flex: 1;
+    text-align: center;
+    color: var(--yellow);
+    font-size: 1.1em;
+    font-weight: 800;
+  }
+  .flight-card .fl-num {
+    background: var(--coral);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-weight: 800;
+    font-size: 0.85em;
+  }
+
+  /* HIGHLIGHTS BAR */
+  .day-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px 28px;
+    background: var(--sand);
+    border-bottom: 1px solid #FFE0B2;
+  }
+  .hl-chip {
+    background: white;
+    border-radius: 20px;
+    padding: 5px 13px;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: var(--coral);
+    border: 1.5px solid var(--sand-dk);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #AAA;
+    font-size: 0.82em;
+  }
+  .footer span { color: var(--coral); }
+
+  /* WEATHER BAR */
+  .weather-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: linear-gradient(90deg, #0a2342 0%, #1a3a5c 100%);
+    padding: 12px 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .weather-bar.loading {
+    justify-content: center;
+    padding: 10px 28px;
+    font-size: 0.82em;
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+  }
+  .wx-icon { font-size: 2em; flex-shrink: 0; }
+  .wx-temps {
+    display: flex;
+    flex-direction: column;
+  }
+  .wx-high { font-size: 1.3em; font-weight: 800; color: #FFD166; line-height: 1; }
+  .wx-low { font-size: 0.78em; color: rgba(255,255,255,0.6); margin-top: 2px; }
+  .wx-divider { width: 1px; height: 34px; background: rgba(255,255,255,0.15); flex-shrink: 0; }
+  .wx-desc { color: rgba(255,255,255,0.9); font-size: 0.88em; font-weight: 700; }
+  .wx-rain {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.82em;
+    color: rgba(255,255,255,0.85);
+    font-weight: 700;
+  }
+  .wx-wind {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.82em;
+    color: rgba(255,255,255,0.75);
+    font-weight: 700;
+  }
+  .wx-label {
+    font-size: 0.65em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+    display: block;
+  }
+  .wx-error { color: rgba(255,255,255,0.4); font-size:0.8em; font-style:italic; }
+
+  /* WEATHER REFRESH BAR */
+  .wx-refresh-bar {
+    max-width: 1100px;
+    margin: 0 auto 6px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.78em;
+    color: #999;
+  }
+  .wx-refresh-btn {
+    background: white;
+    border: 1.5px solid #ddd;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85em;
+    font-weight: 700;
+    color: var(--coral);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .wx-refresh-btn:hover { background: var(--coral); color: white; border-color: var(--coral); }
+  .wx-refresh-btn:disabled { opacity: 0.5; cursor: wait; }
+  #wx-last-updated { font-style: italic; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 2em; }
+    .day-header { padding: 18px 16px; }
+    .timeline { padding: 16px; }
+    .time-col { min-width: 50px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>🌴 Phuket 2026</h1>
+  <p class="subtitle">3 Families · Beach · Adventure · Memories</p>
+  <div class="dates">✈️ 7 July — 17 July 2026</div>
+</div>
+
+<!-- INFO STRIP -->
+<div class="info-strip">
+  <div class="info-card">
+    <span class="icon">🏨</span>
+    <h3>Accommodation</h3>
+    <p>Impiana Beachfront Resort<br>Patong, Phuket<br><small style="color:#999">Check-in: 7 Jul after 3pm · Check-out: 16 Jul before 12pm</small></p>
+  </div>
+  <div class="info-card teal">
+    <span class="icon">✈️</span>
+    <h3>Outbound Flights</h3>
+    <p>JQ509 · SYD → MEL · 9:45am–11:25am<br>JQ17 · MEL → HKT · 2:50pm–8:40pm<br><small style="color:#999">Tuesday 7 July 2026</small></p>
+  </div>
+  <div class="info-card yellow">
+    <span class="icon">🔄</span>
+    <h3>Return Flights</h3>
+    <p>JQ18 · HKT → MEL · 10:25pm–9:45am<br>JQ512 · MEL → SYD · 12:30pm–1:55pm<br><small style="color:#999">16 Jul departure · 17 Jul arrival Sydney</small></p>
+  </div>
+  <div class="info-card" style="border-top-color:var(--purple)">
+    <span class="icon">👨‍👩‍👧‍👦</span>
+    <h3>Group</h3>
+    <p>3 Families<br>Mix of activities + downtime<br><small style="color:#999">9 nights in paradise 🌺</small></p>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <strong style="font-size:0.85em; color:#777; margin-right:4px">KEY:</strong>
+  <div class="legend-item"><div class="legend-dot" style="background:#5BA4CF"></div>Travel</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>Hotel</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Dining</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Activity</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7B9CF0"></div>Relax</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>Nightlife</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#4CAF50"></div>Transit</div>
+</div>
+
+<!-- WEATHER REFRESH -->
+<div class="wx-refresh-bar">
+  <button class="wx-refresh-btn" id="wx-refresh-btn" onclick="refreshWeather()">🔄 Refresh Weather</button>
+  <span id="wx-last-updated">Loading weather data…</span>
+</div>
+
+
+<!-- DAY PANELS -->
+<div class="day-panels">
+
+  <!-- DAY 0: Travel Day -->
+  <div class="day-panel active" id="day-0">
+    <div class="weather-bar loading" id="wx-0">⏳ Loading weather data…</div>
+    <div class="day-header navy-hdr">
+      <div class="day-big-num">01</div>
+      <div class="day-title">
+        <h2>Travel Day — Sydney to Phuket</h2>
+        <p>Tuesday, 7 July 2026 · Via Melbourne</p>
+      </div>
+      <div class="day-emoji-big">✈️</div>
+    </div>
+    <div class="day-highlights">
+      <div class="hl-chip">✈️ JQ509 Sydney → Melbourne</div>
+      <div class="hl-chip">✈️ JQ17 Melbourne → Phuket</div>
+      <div class="hl-chip">🕐 ~3.5hr Melbourne transit</div>
+      <div class="hl-chip">🏨 Check-in after 3pm</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9:45am</span></div>
+        <div class="dot-col"><div class="dot dot-travel">✈️</div></div>
+        <div class="content-col">
+          <div class="event-card type-travel">
+            <div class="tag tag-travel">✈️ Departure</div>
+            <div class="flight-card">
+              <div><div class="fl-from">SYDNEY</div><div class="fl-code">SYD · 9:45am</div></div>
+              <div class="fl-arrow">──── JQ509 ────▶</div>
+              <div><div class="fl-to">MELBOURNE</div><div class="fl-code">MEL · 11:25am</div></div>
+              <div class="fl-num">JQ509</div>
+            </div>
+            <p style="margin-top:10px">Jetstar flight. Arrive at Sydney Airport T2 no later than 7:45am. Flight time approx 1h 40min.</p>
+            <div class="tip"><span class="tip-icon">💡</span> Check bags early — 3 families makes for a lot of luggage! Grab breakfast at the airport before boarding.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>11:25am</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🔄</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🔄 Transit</div>
+            <h4>Melbourne Tullamarine — Layover</h4>
+            <p>~3 hours 25 mins in Melbourne. Collect bags if needed, check-in for JQ17 at the international terminal. Grab lunch and let the kids burn off some energy.</p>
+            <div class="tip"><span class="tip-icon">🍔</span> Head to T2 International. Try the food court — plenty of options for the group.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>2:50pm</span></div>
+        <div class="dot-col"><div class="dot dot-travel">✈️</div></div>
+        <div class="content-col">
+          <div class="event-card type-travel">
+            <div class="tag tag-travel">✈️ Departure</div>
+            <div class="flight-card">
+              <div><div class="fl-from">MELBOURNE</div><div class="fl-code">MEL · 2:50pm</div></div>
+              <div class="fl-arrow">──── JQ17 ────▶</div>
+              <div><div class="fl-to">PHUKET</div><div class="fl-code">HKT · 8:40pm</div></div>
+              <div class="fl-num">JQ17</div>
+            </div>
+            <p style="margin-top:10px">Jetstar direct to Phuket International. Flight time approx 8h 50min (no time zone change — Thailand is UTC+7, same offset as no daylight saving in winter).</p>
+            <div class="tip"><span class="tip-icon">🎧</span> Download movies/shows before you board! Good time to get the kids to sleep on the plane.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>8:40pm</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🌴</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🛬 Arrival</div>
+            <h4>Arrive Phuket International Airport (HKT)</h4>
+            <p>Passport control, collect luggage, clear customs. Allow 45–60 mins through the terminal.</p>
+            <div class="tip"><span class="tip-icon">📱</span> Pick up a SIM card inside arrivals (AIS or DTAC) — great local data plans for ~200–300 THB. Get one per family.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>~9:45pm</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚐</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚐 Transfer</div>
+            <h4>Airport → Impiana Beachfront Resort, Patong</h4>
+            <p>Pre-book a minivan or two private taxis to fit the whole group + luggage. Approx 45–50 min drive to Patong. ~500–700 THB per taxi.</p>
+            <div class="tip"><span class="tip-icon">⚠️</span> Avoid the tuk-tuks for airport transfers — use the metered taxis at the official rank or pre-book with the hotel.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>~10:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-hotel">🏨</div></div>
+        <div class="content-col">
+          <div class="event-card type-hotel">
+            <div class="tag tag-hotel">🏨 Check-in</div>
+            <h4>Impiana Beachfront Resort — Check In</h4>
+            <p>Late check-in. Hotel is 24hr so no drama arriving this late. Get keys, get settled, freshen up.</p>
+            <div class="tip"><span class="tip-icon">🌙</span> Light supper from the hotel bar or grab a late bite from a nearby restaurant on the beachfront strip — many stay open past midnight in Patong.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DAY 1: Settle in -->
+  <div class="day-panel" id="day-1">
+    <div class="weather-bar loading" id="wx-1">⏳ Loading weather data…</div>
+    <div class="day-header teal-hdr">
+      <div class="day-big-num">02</div>
+      <div class="day-title">
+        <h2>First Full Day — Welcome to Patong!</h2>
+        <p>Wednesday, 8 July 2026</p>
+      </div>
+      <div class="day-emoji-big">🏖️</div>
+    </div>
+    <div class="day-highlights">
+      <div class="hl-chip">🌅 Sleep in & settle</div>
+      <div class="hl-chip">🏖️ Patong Beach</div>
+      <div class="hl-chip">🥥 Explore the area</div>
+      <div class="hl-chip">🍹 Bangla Road bars tonight</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="time-col"><span>8–9am</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍳</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍳 Breakfast</div>
+            <h4>Hotel Breakfast — Take Your Time</h4>
+            <p>Sleep in, no rush. Head down for breakfast whenever the families are ready. It's a travel recovery day — let everyone find their pace.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>10am</span></div>
+        <div class="dot-col"><div class="dot dot-relax">🌊</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">🌊 Beach</div>
+            <h4>First Dip — Patong Beach</h4>
+            <p>Walk the 30 seconds to the beach! Patong Beach is 3km long and bustling. Grab sun loungers (approx 100–200 THB each). Wade into the warm Andaman Sea.</p>
+            <div class="tip"><span class="tip-icon">☀️</span> Sunscreen is essential — Phuket sun is intense even in July. July can see some rain showers but usually short and warm.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>12:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🥘</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍜 Lunch</div>
+            <h4>Beachfront Lunch</h4>
+            <p>Try one of the many beachfront restaurants along Patong Beach. Pad Thai, Mango Sticky Rice, Tom Yum soup — start your Thai food adventure. Expect 80–150 THB per dish.</p>
+            <div class="tip"><span class="tip-icon">🍺</span> Chang or Singha beer goes down perfectly in the heat. Or try a fresh coconut straight from the vendor!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>2–5pm</span></div>
+        <div class="dot-col"><div class="dot dot-relax">🏊</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">🏊 Chill</div>
+            <h4>Pool Time + Explore</h4>
+            <p>Back to the resort for pool time. A perfect afternoon to relax, unpack properly, explore the hotel grounds and Patong beachfront strip. Browse the beach vendors — sarongs, hats, coconuts.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍤</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍤 Dinner</div>
+            <h4>Group Dinner — Seafood on the Beach</h4>
+            <p>Head to one of Patong's seafood restaurants for the group's first big dinner together. Recommended: <strong>Baan Rim Pa</strong> (cliff-side Thai fine dining) or <strong>Patong Seafood Restaurant</strong> on the beachfront.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9pm</span></div>
+        <div class="dot-col"><div class="dot dot-night">🍹</div></div>
+        <div class="content-col">
+          <div class="event-card type-night">
+            <div class="tag tag-night">🍹 Nightlife</div>
+            <h4>Bangla Road — First Night Out!</h4>
+            <p>Welcome to the most famous street in Phuket. Bangla Road is a 400m pedestrian strip lined with open-air bars, neon lights, live music and street performers. The kids will be wide-eyed!</p>
+            <p style="margin-top:8px">Have a walk, grab cocktails from the open bars, enjoy the atmosphere. It's lively, fun and safe for families to walk through early in the evening.</p>
+            <div class="tip"><span class="tip-icon">💸</span> Buckets of cocktails are a local tradition — approx 350–500 THB. Tiger Bar and Surfer Bar are great options.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DAY 2: Private Charter -->
+  <div class="day-panel" id="day-2">
+    <div class="weather-bar loading" id="wx-2">⏳ Loading weather data…</div>
+    <div class="day-header" style="background:linear-gradient(135deg,#006994 0%,#0099CC 50%,#00C9B1 100%)">
+      <div class="day-big-num">03</div>
+      <div class="day-title">
+        <h2>Lagoon 450F Private Catamaran Charter</h2>
+        <p>Thursday, 9 July 2026</p>
+      </div>
+      <div class="day-emoji-big">⛵</div>
+    </div>
+    <div class="day-highlights">
+      <div class="hl-chip">🚐 Hotel pickup 9:00am</div>
+      <div class="hl-chip">⛵ Depart Chalong Marina 10:00am</div>
+      <div class="hl-chip">4 cabins · 4 bathrooms · AC</div>
+      <div class="hl-chip">💰 THB 65,000 / 15 pax max</div>
+      <div class="hl-chip">🏝️ Return marina 6:00pm</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:30am</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍳</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍳 Breakfast</div>
+            <h4>Early Hotel Breakfast</h4>
+            <p>Up and at 'em — big day on the water. Eat well, apply sunscreen, wear swimmers under your clothes. Bring a towel, hat, sunglasses and a dry bag for phones.</p>
+            <div class="tip"><span class="tip-icon">💊</span> Bring motion sickness tablets if anyone is prone — even calm days can have a gentle swell. Reef-safe sunscreen only please.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9:00am</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚐</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚐 Hotel Pickup</div>
+            <h4>Transfer: Impiana Cabana Patong → Chalong Marina</h4>
+            <p>Private charter transfer picks up from the hotel at <strong>9:00am sharp</strong>. Chalong Marina is approximately 35–40 min south of Patong.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9:45am</span></div>
+        <div class="dot-col"><div class="dot dot-hotel">⚓</div></div>
+        <div class="content-col">
+          <div class="event-card type-hotel">
+            <div class="tag tag-hotel">⚓ Boarding</div>
+            <h4>Arrive Chalong Marina — Board the Lagoon 450F</h4>
+            <p>Meet your Captain and crew. Safety briefing, then explore the boat — <strong>4 private cabins, 4 bathrooms, fully air-conditioned saloon</strong>, spacious trampolines up front, shaded aft deck, and a swim platform at the stern. Snorkelling equipment and towels all provided.</p>
+            <div class="tip"><span class="tip-icon">🥂</span> Note: alcoholic drinks are <strong>not included</strong> — BYO your preferred drinks or buy from a nearby store before boarding. Soft drinks and water are included all day.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>10:00am</span></div>
+        <div class="dot-col"><div class="dot dot-activity">⛵</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">⛵ Cast Off!</div>
+            <h4>Depart Chalong Marina — 3 Confirmed Stops</h4>
+            <p>Your confirmed 8-hour route visits three incredible locations across the Andaman Sea:</p>
+            <p style="margin-top:10px">🏝️ <strong>Stop 1 — Maiton Island</strong><br>A private, exclusive island anchorage — less crowded and more serene. Time to swim, snorkel and soak it in.</p>
+            <p style="margin-top:8px">🐠 <strong>Stop 2 — Racha Island (Racha Yai)</strong><br>Arguably Phuket's best snorkelling — incredible water clarity, vibrant coral gardens and abundant marine life. Blacktip reef sharks and tropical fish are common sightings.</p>
+            <p style="margin-top:8px">🌅 <strong>Stop 3 — Coral Island + Promthep Cape</strong><br>Coral Island swimming followed by a stunning sail past Promthep Cape — one of Phuket's most dramatic headlands with sweeping Andaman Sea views.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>11:00am</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🤿</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🤿 Snorkelling</div>
+            <h4>First Snorkelling Stop</h4>
+            <p>Anchor at the first island location. Crystal clear Andaman Sea, tropical reef fish, coral formations. The crew guides you to the best spots. Kids and non-swimmers can stay on the swim platform — the water depth is manageable and life jackets are available.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>1:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍽️</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍽️ Lunch</div>
+            <h4>Freshly Prepared Lunch On Board ✅ Included</h4>
+            <p>The crew serves a full Thai-style lunch at anchor — fresh grilled seafood, salads, rice, curries, and tropical fruit. Soft drinks and water flowing all day.</p>
+            <div class="tip"><span class="tip-icon">🍺</span> <strong>BYO alcohol reminder</strong> — now's a great time to open the beers or wine you brought aboard! National Park entry fees may apply at some islands (crew will advise).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>2:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🏖️</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🏖️ Afternoon</div>
+            <h4>Second Island Stop + Afternoon Swim</h4>
+            <p>Sail on to the second location. More snorkelling, swimming off the stern, paddling, or just lounging on the trampoline nets with the sun on your face and a drink in hand. Pure bliss for all 3 families.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>4:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-relax">🌅</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">🌅 Sail Back</div>
+            <h4>Afternoon Sail Back to Chalong</h4>
+            <p>The Lagoon 450F turns for home. Relax on deck as Phuket's coastline drifts by — salty hair, sun-kissed skin, cold drinks, happy kids. Fresh fruit served on the way back.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>6:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-transit">⚓</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">⚓ Return</div>
+            <h4>Dock at Chalong Marina — Transfer Back to Patong</h4>
+            <p>Back at the marina at 6:00pm. Private transfer back to Patong (~40 min). Everyone will be pleasantly wrecked.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🦐</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🦐 Dinner</div>
+            <h4>Easy Dinner Back in Patong</h4>
+            <p>Low-key tonight after a big day at sea. Beachside restaurant or the hotel — pad thai, grilled prawns, a cold Chang. Early night — you'll sleep like a log after 8 hours on the water.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span></span></div>
+        <div class="dot-col"><div class="dot dot-hotel">📋</div></div>
+        <div class="content-col">
+          <div class="event-card type-hotel">
+            <div class="tag tag-hotel">📋 Charter Summary</div>
+            <h4>Lagoon 450F — What's Included & Excluded</h4>
+            <p><strong>✅ Included:</strong> Private yacht with Captain & Crew · Lunch on board · Fresh fruit · Soft drinks & water · Snorkelling equipment · Fuel (standard itinerary) · Towels</p>
+            <p style="margin-top:8px"><strong>❌ Excluded:</strong> Alcoholic beverages (BYO) · National Park Fees if applicable</p>
+            <p style="margin-top:8px"><strong>💰 Charter price:</strong> THB 65,000 total · Max 15 passengers</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DAY 3: Phi Phi -->
+  <div class="day-panel" id="day-3">
+    <div class="weather-bar loading" id="wx-3">⏳ Loading weather data…</div>
+    <div class="day-header" style="background:linear-gradient(135deg,#B8860B 0%,#9B5DE5 100%)">
+      <div class="day-big-num">04</div>
+      <div class="day-title">
+        <h2>Big Buddha + Muay Thai Fight Night</h2>
+        <p>Friday, 10 July 2026</p>
+      </div>
+      <div class="day-emoji-big">🥊</div>
+    </div>
+    <div class="day-highlights">
+      <div class="hl-chip">🙏 Big Buddha</div>
+      <div class="hl-chip">🏯 Wat Chalong</div>
+      <div class="hl-chip">🏘️ Phuket Old Town</div>
+      <div class="hl-chip">🥊 Muay Thai 8:00pm</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="time-col"><span>8am</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍳</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍳 Breakfast</div>
+            <h4>Hotel Breakfast</h4>
+            <p>Good start — Big Buddha is best in the morning before the midday heat. Dress modestly for the temple visit (shoulders and knees covered — sarongs available to borrow on-site).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9:30am</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚕</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚕 Transfer</div>
+            <h4>Hotel → Big Buddha, Nakkerd Hills</h4>
+            <p>~30–40 min drive south from Patong up into the hills. Scenic road winds up through rubber plantations. Taxis/tuk-tuks approx 400–500 THB each way.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>10:15am</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🙏</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🙏 Sightseeing</div>
+            <h4>The Big Buddha — Phuket's Most Iconic Landmark</h4>
+            <p>The magnificent 45-metre tall white marble Mingmongkol Buddha sits atop Nakkerd Hill and can be seen from across Phuket. Entry is <strong>free</strong> — donations welcome.</p>
+            <p style="margin-top:8px">Walk up to the base for close-up views. See the smaller surrounding statues, prayer halls and meditation spaces. The <strong>360° panoramic view</strong> from the hilltop is absolutely breathtaking — Patong, Kata and Karon beaches all visible on a clear day.</p>
+            <div class="tip"><span class="tip-icon">👗</span> Temple dress code: cover shoulders and knees. Free sarong loans available at the bottom of the steps.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>11:30am</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🏯</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🏯 Temple</div>
+            <h4>Wat Chalong — Phuket's Most Important Temple</h4>
+            <p>Just 10 min drive from Big Buddha. Phuket's largest and most revered Buddhist temple. Ornate spires, detailed murals, monks in residence. Deeply peaceful and culturally fascinating. Free entry.</p>
+            <div class="tip"><span class="tip-icon">🕯️</span> You can make an offering of incense and flowers at the main altar — a beautiful experience for the whole family.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>1:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍛</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍛 Lunch</div>
+            <h4>Local Thai Lunch Near Chalong</h4>
+            <p>Chalong area has some fantastic local restaurants away from the tourist strip. Try <strong>Khao Tom Boran</strong> or any street stall — authentic and cheap. Amazing Thai green curry, massaman, and pad kra pao.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>2:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🏘️</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🏘️ Old Town</div>
+            <h4>Stop: Phuket Old Town en Route Back</h4>
+            <p>On the way back from Chalong, ask your driver to drop you in <strong>Phuket Old Town</strong> (~10 min from Wat Chalong). Spend 1–1.5 hours exploring before heading back to the hotel — it's perfectly timed before Fantasea prep.</p>
+            <p style="margin-top:8px">Phuket Old Town is a UNESCO-recognised Sino-Portuguese neighbourhood full of beautifully preserved colourful shophouses, vibrant street art, hipster cafes, night market stalls and quirky boutiques. Thalang Road and Soi Romanee are the most photogenic streets. Great for a coffee and a wander.</p>
+            <div class="tip"><span class="tip-icon">📸</span> Soi Romanee is the most Instagrammable street in Phuket — pastel shophouses, bougainvillea, street art. A 30-minute wander covers the highlights.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>3–5pm</span></div>
+        <div class="dot-col"><div class="dot dot-relax">🏊</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">🏊 Relax</div>
+            <h4>Afternoon — Pool & Rest</h4>
+            <p>Hotel pool, quick nap, get the kids sorted before heading out. Big Friday night energy incoming.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍜</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍜 Dinner</div>
+            <h4>Quick Dinner Near the Stadium</h4>
+            <p>Grab a meal near Bangla Boxing Stadium before the fights. Street food, Thai BBQ, or a nearby restaurant — keep it casual and don't eat too much. You'll be on your feet cheering!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>8:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-night">🥊</div></div>
+        <div class="content-col">
+          <div class="event-card type-night">
+            <div class="tag tag-night">🥊 Fight Night</div>
+            <h4>Muay Thai Boxing — Bangla Boxing Stadium</h4>
+            <p>Friday night is fight night. Bangla Boxing Stadium on Soi Bangla hosts professional Muay Thai bouts with a typical card of <strong>8–10 fights</strong> over 2.5–3 hours.</p>
+            <p style="margin-top:8px">Ringside seats put you right in the action — Thai trainers and gamblers cheering, traditional Sarama music setting the pace, fighters throwing elbows and knees. Kids absolutely love it and it's totally family-safe.</p>
+            <div class="tip"><span class="tip-icon">💰</span> Ringside 1,500–2,000 THB · Standard 1,000 THB. Book at the gate or online. Cold beers available throughout.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>10:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-night">🍹</div></div>
+        <div class="content-col">
+          <div class="event-card type-night">
+            <div class="tag tag-night">🍹 Friday Night</div>
+            <h4>Post-Fight Friday — Bangla Road</h4>
+            <p>It's right there. Friday night on Bangla Road is electric — the biggest night of the week. Celebrate the fights with cocktail buckets, live bands and the full Patong experience at its peak.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DAY 4: Beach + Fantasea -->
+  <div class="day-panel" id="day-4">
+    <div class="weather-bar loading" id="wx-4">⏳ Loading weather data…</div>
+    <div class="day-header" style="background:linear-gradient(135deg,#C0392B 0%,#E74C3C 50%,#FF6B6B 100%)">
+      <div class="day-big-num">05</div>
+      <div class="day-title">
+        <h2>Recovery Day + Fantasea Night Show</h2>
+        <p>Saturday, 11 July 2026</p>
+      </div>
+      <div class="day-emoji-big">🎪</div>
+    </div>
+    <div class="day-highlights">
+      <div class="hl-chip">🏖️ Freedom or Paradise Beach</div>
+      <div class="hl-chip">🛍️ Jungceylon shopping</div>
+      <div class="hl-chip">🎪 Fantasea dinner + show</div>
+      <div class="hl-chip">✨ Kamala Beach</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9am</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍳</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍳 Breakfast</div>
+            <h4>Sleep In — Leisurely Hotel Breakfast</h4>
+            <p>After four big days, this morning is yours. No alarm. Wander down for breakfast whenever the families are ready and refuel at your own pace.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>10am–1pm</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🏖️</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🏖️ Beach</div>
+            <h4>Freedom Beach or Paradise Beach — Upgrade from Patong!</h4>
+            <p>Ditch the busy Patong strip for something more beautiful today:</p>
+            <p style="margin-top:8px">🏖️ <strong>Freedom Beach</strong> — a hidden gem just south of Patong, accessible only by longtail boat (~10 min from Patong pier, ~150 THB each way). Crystal water, soft white sand, very few people. Arguably one of Phuket's best beaches.</p>
+            <p style="margin-top:8px">🏖️ <strong>Paradise Beach</strong> — slightly larger, accessible by road or boat. Calm clear water, good snorkelling off the rocks, beach bar on site.</p>
+            <div class="tip"><span class="tip-icon">⛵</span> For Freedom Beach, grab a longtail boat from Patong Beach's southern end near the rocks. Agree the return pickup time with the driver. Bring cash, snorkels and snacks.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>1pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍜</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍜 Lunch</div>
+            <h4>Lunch at Jungceylon</h4>
+            <p>Tuk-tuk to Jungceylon mall — cool down in the air-conditioning over a good lunch. Food court has great authentic Thai options alongside everything else.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>2–5pm</span></div>
+        <div class="dot-col"><div class="dot dot-relax">🛍️</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">🛍️ Shopping</div>
+            <h4>Jungceylon & Street Markets</h4>
+            <p>Souvenirs, Thai silk, elephant pants, Muay Thai shorts for the kids, street art and handicrafts. Bargain hard at the market stalls.</p>
+            <div class="tip"><span class="tip-icon">💸</span> Start at 40–50% of the asking price and negotiate with a smile — it's expected and part of the fun.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>5:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚕</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚕 Transfer</div>
+            <h4>Hotel → Phuket FantaSea, Kamala Beach</h4>
+            <p>~20–25 min drive north to Kamala Beach. Pre-book tuk-tuks or taxis for the whole group (~300–400 THB per vehicle).</p>
+            <div class="tip"><span class="tip-icon">📋</span> <strong>Book tickets in advance:</strong> phuket-fantasea.com. Show + dinner buffet package approx 2,200–2,700 THB per adult. Kids' prices available.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>5:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🎭</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🎭 Attraction</div>
+            <h4>Arrive at Phuket FantaSea</h4>
+            <p>Explore the theme park grounds before dinner — carnival games, photo opportunities with tigers and elephants (behind glass), cultural village and shopping village with Thai handicrafts.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>6:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍽️</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍽️ Dinner</div>
+            <h4>Fantasea Dinner Buffet — Palace of the Elephants</h4>
+            <p>The massive 4,000-seat Golden Kinnaree Buffet Restaurant. Over 150 Thai and international dishes. Allow 1.5–2 hours to eat, drink and enjoy — it's all included in the package.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>8:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-night">✨</div></div>
+        <div class="content-col">
+          <div class="event-card type-night">
+            <div class="tag tag-night">✨ Show</div>
+            <h4>Fantasea Show — "Fantasy of a Kingdom"</h4>
+            <p>A spectacular 70-minute extravaganza combining Thai mythology with Las Vegas-style production. Live elephants, acrobats, illusionists, pyrotechnics, a cast of 100+ performers and dazzling special effects.</p>
+            <p style="margin-top:8px">One of the best shows in all of Asia — kids and adults alike will be completely mesmerised.</p>
+            <div class="tip"><span class="tip-icon">📵</span> No photography during the show — phones must be put away. Just enjoy the spectacle!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>10:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚕</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚕 Return</div>
+            <h4>Transfer Back to Patong</h4>
+            <p>~25 min back to the hotel. An incredible night — the kids will be asleep in the taxi!</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DAY 5: Big Buddha + Fantasea -->
+  <div class="day-panel" id="day-5">
+    <div class="weather-bar loading" id="wx-5">⏳ Loading weather data…</div>
+    <div class="day-header" style="background:linear-gradient(135deg,#006994 0%,#00BFFF 100%)">
+      <div class="day-big-num">06</div>
+      <div class="day-title">
+        <h2>Phi Phi Island — Full Day!</h2>
+        <p>Sunday, 12 July 2026</p>
+      </div>
+      <div class="day-emoji-big">⛵</div>
+    </div>
+    <div class="day-highlights">
+      <div class="hl-chip">⛵ Speed boat full day tour</div>
+      <div class="hl-chip">🏖️ Maya Bay</div>
+      <div class="hl-chip">🤿 Snorkelling</div>
+      <div class="hl-chip">🏝️ Phi Phi Don village</div>
+      <div class="hl-chip">🍱 Lunch on board</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="time-col"><span>6:30am</span></div>
+        <div class="dot-col"><div class="dot dot-food">☕</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">☕ Breakfast</div>
+            <h4>Quick Breakfast — Early Start!</h4>
+            <p>Light breakfast before the big day. Grab something from the hotel or the pier-side cafes. You won't regret an early departure — you beat the crowds to Maya Bay.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:00am</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚐</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚐 Transfer</div>
+            <h4>Hotel → Patong Pier</h4>
+            <p>Short tuk-tuk or taxi to Patong Pier (5–10 min). Meet your speed boat guide and get equipped with snorkelling gear and life jackets.</p>
+            <div class="tip"><span class="tip-icon">📋</span> <strong>Book in advance:</strong> Many operators offer Phi Phi speed boat tours from Patong Pier — approx 1,500–2,000 THB per adult incl. lunch. Pick 'Premium' tours for smaller groups and faster boats.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:30am</span></div>
+        <div class="dot-col"><div class="dot dot-activity">⛵</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">⛵ Departure</div>
+            <h4>Speed Boat Departs Patong → Phi Phi Leh</h4>
+            <p>~45 min exhilarating ride across the Andaman Sea. The water is impossibly turquoise. First stop: <strong>Phi Phi Leh</strong> and the famous <strong>Maya Bay</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>8:30am</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🏖️</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🏖️ Activity</div>
+            <h4>Maya Bay — The Beach!</h4>
+            <p>The iconic bay made famous by Leonardo DiCaprio's "The Beach." Surrounded by towering limestone cliffs, the water is crystal clear. Swim, snorkel, explore the caves and walk the trails above the bay for epic views.</p>
+            <div class="tip"><span class="tip-icon">⏰</span> You're early — which means fewer boats! This is why the 7am departure is worth it. Spend at least 1–1.5 hours here.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>10:30am</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🤿</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🤿 Snorkelling</div>
+            <h4>Snorkelling at Shark Point & Pileh Cove</h4>
+            <p>Multiple snorkelling stops around Phi Phi Leh. See blacktip reef sharks (harmless!), tropical fish, and vibrant coral. Pileh Cove is a hidden lagoon encircled by cliffs — stunning.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>12:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍱</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍱 Lunch</div>
+            <h4>Lunch on Phi Phi Don Island</h4>
+            <p>Most full-day tours include lunch at a restaurant on Phi Phi Don. Fresh grilled fish, rice dishes, papaya salad. Take time to wander the Phi Phi Don village — boutique shops, ice cream, fresh smoothies.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>2:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🏖️</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🌊 More Island</div>
+            <h4>Monkey Beach + Viking Cave</h4>
+            <p>Round off the island tour with a stop at Monkey Beach (cheeky macaques will steal your food!) and the famous Viking Cave full of ancient cave art. Last swim before heading home.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>3:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-transit">⛵</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">⛵ Return</div>
+            <h4>Speed Boat Return to Patong</h4>
+            <p>~45 min ride back. Arrive Patong Pier around 4:15–4:30pm. Sun-kissed, salty, and completely happy.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>5–7pm</span></div>
+        <div class="dot-col"><div class="dot dot-relax">🚿</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">🚿 Freshen Up</div>
+            <h4>Hotel — Shower & Rest</h4>
+            <p>Rinse off the salt, sunscreen, and suncream. Relax before a chilled evening. Everyone will be pleasantly tired.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍜</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍜 Dinner</div>
+            <h4>Casual Group Dinner</h4>
+            <p>Something relaxed tonight — the Soi Bangla or beachfront strip. Try <strong>Kata Rocks</strong> for cocktails with a view, or just pick a cosy street restaurant for Thai BBQ.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DAY 6: Elephant Sanctuary -->
+  <div class="day-panel" id="day-6">
+    <div class="weather-bar loading" id="wx-6">⏳ Loading weather data…</div>
+    <div class="day-header green-hdr">
+      <div class="day-big-num">07</div>
+      <div class="day-title">
+        <h2>Elephant Sanctuary + Carnival Magic</h2>
+        <p>Sunday, 13 July 2026</p>
+      </div>
+      <div class="day-emoji-big">🐘</div>
+    </div>
+    <div class="day-highlights">
+      <div class="hl-chip">🐘 Elephant Jungle Sanctuary</div>
+      <div class="hl-chip">🌿 Ethical no-riding experience</div>
+      <div class="hl-chip">🎡 Carnival Magic show</div>
+      <div class="hl-chip">🍹 Bangla Road night</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:00am</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍳</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍳 Early Breakfast</div>
+            <h4>Rise and Shine — Early Start Today</h4>
+            <p>Quick breakfast at the hotel. Wear comfortable clothes you don't mind getting dirty or wet. Bring insect repellent and sunscreen.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:30am</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚐</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚐 Transfer</div>
+            <h4>Depart Hotel → Elephant Jungle Sanctuary</h4>
+            <p>Pick-up from hotel included with most sanctuary bookings. ~45–60 min drive north of Patong into the jungle hills of Phuket.</p>
+            <div class="tip"><span class="tip-icon">📋</span> <strong>Book in advance:</strong> Elephant Jungle Sanctuary Phuket (ethicalelephantsanctuary.com). Morning session recommended for best temperatures and light.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>8:30am</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🐘</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🐘 Activity</div>
+            <h4>Elephant Sanctuary Experience — 3 Hours</h4>
+            <p>An ethical, no-riding elephant experience the whole family will never forget. Highlights include:</p>
+            <p style="margin-top:8px">• <strong>Feeding the elephants</strong> — bananas and sugar cane by hand<br>
+            • <strong>Walking alongside</strong> them through jungle trails<br>
+            • <strong>Mud bathing</strong> — yes, you'll get muddy!<br>
+            • <strong>Elephant bathing</strong> in the stream<br>
+            • Traditional Thai lunch included</p>
+            <div class="tip"><span class="tip-icon">📸</span> Staff photograph the whole experience for you — one of the most memorable moments of the trip. Cost approx 2,500–3,000 THB per adult.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>12:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍛</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍛 Lunch</div>
+            <h4>Thai Lunch at Sanctuary</h4>
+            <p>Traditional Thai lunch included — rice dishes, curries, fresh fruit. A beautiful way to wind down after an unforgettable morning.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>12:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚐</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚐 Return</div>
+            <h4>Transfer Back to Patong</h4>
+            <p>~1 hour return drive. Drop-off at hotel. Everyone will be exhausted in the best possible way.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>2–6pm</span></div>
+        <div class="dot-col"><div class="dot dot-relax">😴</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">😴 Rest</div>
+            <h4>Afternoon Recovery — Pool & Beach</h4>
+            <p>Rinse off the elephant mud and cool off in the pool. A long, lazy Sunday afternoon. The kids will crash. Perfect.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>6:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🦐</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🦐 Dinner</div>
+            <h4>Early Dinner Before the Show</h4>
+            <p>Keep it simple and quick tonight — beachside restaurant or night market near the hotel. Pad thai, grilled fish, spring rolls. You need to be at Carnival Magic by 8pm.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚕</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚕 Transfer</div>
+            <h4>Hotel → Carnival Magic, Patong Beach Resort</h4>
+            <p>Short tuk-tuk or taxi to Carnival Magic — it's right in Patong, so only a few minutes from the hotel. Much easier than getting to Fantasea!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>8:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-night">🎡</div></div>
+        <div class="content-col">
+          <div class="event-card type-night">
+            <div class="tag tag-night">🎡 Show</div>
+            <h4>Carnival Magic — Live Entertainment Show</h4>
+            <p>Carnival Magic is Patong's own spectacular live show — acrobatics, aerial silk performers, fire dancers, LED light shows, Thai cultural performances and circus acts all rolled into one. A fantastic evening for all ages, right on your doorstep in Patong.</p>
+            <p style="margin-top:8px">The show runs approximately 75 minutes. Far more relaxed than Fantasea (no massive bus trip, dinner buffet optional) — great for a Sunday night after a big week.</p>
+            <div class="tip"><span class="tip-icon">📋</span> <strong>Book in advance:</strong> carnivalmagicphuket.com. Adults approx 1,400–1,800 THB. Kids' prices available. Dinner add-on optional.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-night">🍹</div></div>
+        <div class="content-col">
+          <div class="event-card type-night">
+            <div class="tag tag-night">🍹 After Show</div>
+            <h4>Nightcap — Bangla Road or Hotel Bar</h4>
+            <p>Easy walk back from the show. Early-ish night — elephant day was big and ATV day is tomorrow!</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DAY 7: ATV/Zipline -->
+  <div class="day-panel" id="day-7">
+    <div class="weather-bar loading" id="wx-7">⏳ Loading weather data…</div>
+    <div class="day-header green-hdr">
+      <div class="day-big-num">08</div>
+      <div class="day-title">
+        <h2>ATV & Jungle Adventure Day</h2>
+        <p>Monday, 14 July 2026</p>
+      </div>
+      <div class="day-emoji-big">🏍️</div>
+    </div>
+    <div class="day-highlights">
+      <div class="hl-chip">🏍️ ATV jungle riding</div>
+      <div class="hl-chip">🏎️ Go Karting (optional)</div>
+      <div class="hl-chip">🏊 Afternoon pool</div>
+      <div class="hl-chip">🍹 Evening bars</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="time-col"><span>8am</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍳</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍳 Breakfast</div>
+            <h4>Hotel Breakfast — Fuel Up!</h4>
+            <p>You'll need energy for this one. Eat a proper breakfast. Wear clothes you don't mind getting dirty — ATV riding through jungle is a muddy affair!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>8:45am</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚐</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚐 Transfer</div>
+            <h4>Hotel → ATV Phuket, Kathu / Kamala Hills</h4>
+            <p>~20–30 min drive into the jungle hills. Most operators include hotel transfer. Recommended: <strong>Phuket ATV Tour</strong> or <strong>Jungle ATV</strong> near Kathu Waterfall area.</p>
+            <div class="tip"><span class="tip-icon">📋</span> Cost approx 1,200–2,000 THB per ATV for 1–2 hours. Kids can ride up front with parents. Book in advance!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9:30am</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🏍️</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🏍️ Activity</div>
+            <h4>ATV Jungle Riding — 1.5–2 Hours</h4>
+            <p>Rev up and hit the trails! Guides lead you through rubber plantations, jungle paths, river crossings and muddy tracks. The whole family can participate — no experience needed, full safety briefing provided.</p>
+            <p style="margin-top:8px">Choose from 30, 60 or 90-minute sessions. The 90-minute trail includes elevated viewpoints over the jungle canopy.</p>
+            <div class="tip"><span class="tip-icon">😄</span> You WILL get muddy. You WILL love it. Bring a change of clothes!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>11:30am</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚐</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚐 Return</div>
+            <h4>Transfer Back to Hotel</h4>
+            <p>Rinse off at the venue, then head back to Patong. Muddy heroes, all of you.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>12:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍜</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍜 Lunch</div>
+            <h4>Lunch Back in Patong</h4>
+            <p>Big appetite after the action. Hit a nearby restaurant — try pad kra pao (Thai basil pork) with a fried egg on top. A local staple.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>2:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-activity">🏎️</div></div>
+        <div class="content-col">
+          <div class="event-card type-activity">
+            <div class="tag tag-activity">🏎️ Optional Activity</div>
+            <h4>Go Karting — Patong Kart Speedway (Optional)</h4>
+            <p>Still got energy? Keep the "Wheels & Thrills" theme going with a session at Patong Kart Speedway, just a short drive from the hotel. Competitive racing on a proper circuit — challenge the other families to a race-off!</p>
+            <p style="margin-top:8px">Sessions run approximately 10–15 minutes on track. Multiple race formats available. Adults and kids (with height requirements) welcome. Great fun before collapsing by the pool.</p>
+            <div class="tip"><span class="tip-icon">🏆</span> ~300–500 THB per session. Race multiple rounds for the full experience. Helmet and safety gear provided.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>4–6pm</span></div>
+        <div class="dot-col"><div class="dot dot-relax">🏊</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">🏊 R&R</div>
+            <h4>Pool Time & Afternoon Recovery</h4>
+            <p>Long lazy afternoon at the hotel pool. Cold drinks, nowhere to be. Pure holiday bliss for adults and kids alike.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍤</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍤 Dinner</div>
+            <h4>Dinner Out</h4>
+            <p>Try something new tonight. Recommended: <strong>Nicky's Handlebar</strong> for American BBQ, or <strong>Joe's Downstairs</strong> for creative modern Thai with incredible sea views.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9pm</span></div>
+        <div class="dot-col"><div class="dot dot-night">🍺</div></div>
+        <div class="content-col">
+          <div class="event-card type-night">
+            <div class="tag tag-night">🍺 Bars</div>
+            <h4>Bangla Road — Bar Night</h4>
+            <p>Another night on Patong's legendary strip. Live music, cocktail buckets, fire performers. Find your favourite spot and settle in for a good Monday night.</p>
+            <div class="tip"><span class="tip-icon">🎶</span> Try Soi Bangla's side streets for quieter live music bars — great acoustic bands playing Thai and international hits.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DAY 8: Last Full Day -->
+  <div class="day-panel" id="day-8">
+    <div class="weather-bar loading" id="wx-8">⏳ Loading weather data…</div>
+    <div class="day-header" style="background:linear-gradient(135deg,#FF6B6B 0%,#FF9F1C 60%,#FFD166 100%)">
+      <div class="day-big-num">09</div>
+      <div class="day-title">
+        <h2>Last Full Day — Beach, Farewell & Ping Pong</h2>
+        <p>Tuesday, 15 July 2026</p>
+      </div>
+      <div class="day-emoji-big">🛍️</div>
+    </div>
+    <div class="day-highlights">
+      <div class="hl-chip">💆 Spa & massage</div>
+      <div class="hl-chip">🏖️ Final beach morning</div>
+      <div class="hl-chip">🛒 Shopping & markets</div>
+      <div class="hl-chip">🥂 Farewell group dinner</div>
+      <div class="hl-chip">🎭 Ping Pong Show night</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9am</span></div>
+        <div class="dot-col"><div class="dot dot-food">☕</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">☕ Breakfast</div>
+            <h4>Slow Last Breakfast</h4>
+            <p>Sleep in — last morning waking up to the Andaman Sea. Take your time over breakfast. No rush today until the evening.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>10am</span></div>
+        <div class="dot-col"><div class="dot dot-relax">💆</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">💆 Optional Spa</div>
+            <h4>Spa & Traditional Thai Massage (Optional)</h4>
+            <p>Last morning — perfect time for a proper spa session before packing up. Patong is full of excellent massage and spa options, from budget foot massage parlours to luxurious resort spas.</p>
+            <p style="margin-top:8px">Options range from a classic 1-hour Thai massage (~300–500 THB at a reputable street spa) to a full package at a hotel spa — aromatic oil massage, hot stone, body scrub, the works. Book ahead if you want multiple people together.</p>
+            <div class="tip"><span class="tip-icon">🌿</span> <strong>Recommended:</strong> Let's Relax Spa or Oasis Spa in Patong — both offer consistent quality at mid-range prices. Book directly for better rates than hotel concierge.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>12pm</span></div>
+        <div class="dot-col"><div class="dot dot-relax">🌊</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">🌊 Last Beach</div>
+            <h4>Final Beach Session — Patong Beach</h4>
+            <p>Last dip in the Andaman Sea. Take a million photos. The kids will not want to leave. Neither will you. Grab sun loungers and soak in every last moment of paradise.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>1pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🥝</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🥝 Lunch</div>
+            <h4>Beachside Lunch — Last Thai Feed!</h4>
+            <p>Go back to your favourite restaurant from the week. Order everything you want one last time — pad thai, spring rolls, mango sticky rice. Taste it all one more time.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>2:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-relax">🛒</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">🛒 Shopping</div>
+            <h4>Final Markets & Souvenir Run</h4>
+            <p>Last sweep through the Patong street markets — Thai silk scarves, carved figurines, street art, spices, tailor-made shirts (collect any ordered items), and all the "same same but different" shirts the kids insist on.</p>
+            <div class="tip"><span class="tip-icon">⚖️</span> Check luggage weight before tonight! Thai shopping adds up fast. Airport overweight fees are painful — check now.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>5pm</span></div>
+        <div class="dot-col"><div class="dot dot-hotel">🧳</div></div>
+        <div class="content-col">
+          <div class="event-card type-hotel">
+            <div class="tag tag-hotel">🧳 Prep</div>
+            <h4>Pack Bags — Check-out Tomorrow!</h4>
+            <p>Head back and pack bags for tomorrow's check-out before 12pm. Get the kids organised. Then freshen up for the big farewell dinner.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🥂</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🥂 Farewell Dinner</div>
+            <h4>Group Farewell Dinner — Make It Special!</h4>
+            <p>All 3 families together for the big farewell dinner. Choose somewhere memorable:</p>
+            <p style="margin-top:8px">• <strong>Baan Rim Pa</strong> — cliff-top Thai fine dining with stunning bay views<br>
+            • <strong>Sala Phuket</strong> — sophisticated beachfront dining<br>
+            • <strong>Suay Restaurant</strong> — modern Thai, one of Phuket's top tables</p>
+            <div class="tip"><span class="tip-icon">🥂</span> Book ahead! These restaurants fill up fast. Toast to an incredible trip together.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-night">🎭</div></div>
+        <div class="content-col">
+          <div class="event-card type-night">
+            <div class="tag tag-night">🎭 Show</div>
+            <h4>Ping Pong Show — Soi Eric / Bangla</h4>
+            <p>Adults-only Phuket rite of passage. The ping pong shows on Soi Eric are part of Patong's legendary after-dark culture. Entry with drinks included — expect touts on the street.</p>
+            <div class="tip"><span class="tip-icon">⚠️</span> <strong>Safety tip:</strong> Agree on the price of everything before entering. Stick together. Use reputable well-lit venues on Soi Eric. It's safe if you're sensible.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>11pm</span></div>
+        <div class="dot-col"><div class="dot dot-night">🌙</div></div>
+        <div class="content-col">
+          <div class="event-card type-night">
+            <div class="tag tag-night">🌙 Last Night</div>
+            <h4>Final Nightcap on Bangla Road</h4>
+            <p>Wrap up the last night with a drink on Bangla Road. Not too late — check-out before 12pm tomorrow and a big departure day ahead.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DAY 9: Departure Day -->
+  <div class="day-panel" id="day-9">
+    <div class="weather-bar loading" id="wx-9">⏳ Loading weather data…</div>
+    <div class="day-header navy-hdr">
+      <div class="day-big-num">10</div>
+      <div class="day-title">
+        <h2>Departure Day — Farewell Phuket!</h2>
+        <p>Wednesday, 16 July 2026</p>
+      </div>
+      <div class="day-emoji-big">👋</div>
+    </div>
+    <div class="day-highlights">
+      <div class="hl-chip">🏨 Check-out before 12pm</div>
+      <div class="hl-chip">☀️ Afternoon at leisure</div>
+      <div class="hl-chip">🚐 Airport transfer ~7:30pm</div>
+      <div class="hl-chip">✈️ JQ18 departs 10:25pm</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:30am</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍳</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍳 Last Breakfast</div>
+            <h4>Final Hotel Breakfast</h4>
+            <p>Get up in time for one last hotel breakfast. Eat well — it's a long travel day. Grab a table with a sea view if you can.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9am</span></div>
+        <div class="dot-col"><div class="dot dot-hotel">🧳</div></div>
+        <div class="content-col">
+          <div class="event-card type-hotel">
+            <div class="tag tag-hotel">🧳 Check-Out</div>
+            <h4>Hotel Check-Out (Before 12pm)</h4>
+            <p>Return keys, settle any remaining charges, hand back towel cards. <strong>Ask the hotel to store your luggage</strong> so you can still enjoy the day without dragging bags around. Most hotels are happy to store until evening.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>12pm–5pm</span></div>
+        <div class="dot-col"><div class="dot dot-relax">☀️</div></div>
+        <div class="content-col">
+          <div class="event-card type-relax">
+            <div class="tag tag-relax">☀️ Free Afternoon</div>
+            <h4>Last Afternoon — Patong at Leisure</h4>
+            <p>Bags stored, you're free! One last walk along Patong Beach. Grab an iced Thai coffee from a street vendor. Browse any remaining markets. Find a shady café and people-watch. Soak in every last drop of Phuket.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>5:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-food">🍜</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">🍜 Dinner</div>
+            <h4>Last Meal in Phuket</h4>
+            <p>Casual dinner near the hotel. Final round of pad thai, tom yum, mango sticky rice. Load up — airport food is expensive and average.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:00pm</span></div>
+        <div class="dot-col"><div class="dot dot-hotel">🧳</div></div>
+        <div class="content-col">
+          <div class="event-card type-hotel">
+            <div class="tag tag-hotel">🧳 Bags</div>
+            <h4>Collect Luggage from Hotel</h4>
+            <p>Pick up stored bags, do final headcount, load into waiting taxis/minivan. Make sure no one leaves anything behind — chargers, medication, passports!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>7:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-transit">🚐</div></div>
+        <div class="content-col">
+          <div class="event-card type-transit">
+            <div class="tag tag-transit">🚐 Airport Transfer</div>
+            <h4>Patong → Phuket International Airport</h4>
+            <p>~45–50 min drive. Pre-book a minivan to fit the whole group + luggage. Allow extra time — July can have traffic on the airport road.</p>
+            <div class="tip"><span class="tip-icon">⏰</span> Arriving ~8:30pm for a 10:25pm departure is ideal — check-in and security for international Jetstar typically opens 3 hours prior.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>~8:20pm</span></div>
+        <div class="dot-col"><div class="dot dot-travel">🛬</div></div>
+        <div class="content-col">
+          <div class="event-card type-travel">
+            <div class="tag tag-travel">✈️ Airport</div>
+            <h4>Phuket International Airport — Check-In</h4>
+            <p>Check in at the Jetstar counter, drop bags, clear passport control. Grab a cold Singha or Leo at the departure lounge bar — final Thai beer! Duty free shopping for any last-minute gifts.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>10:25pm</span></div>
+        <div class="dot-col"><div class="dot dot-travel">✈️</div></div>
+        <div class="content-col">
+          <div class="event-card type-travel">
+            <div class="tag tag-travel">✈️ Departure</div>
+            <div class="flight-card">
+              <div><div class="fl-from">PHUKET</div><div class="fl-code">HKT · 10:25pm</div></div>
+              <div class="fl-arrow">──── JQ18 ────▶</div>
+              <div><div class="fl-to">MELBOURNE</div><div class="fl-code">MEL · 9:45am +1</div></div>
+              <div class="fl-num">JQ18</div>
+            </div>
+            <p style="margin-top:10px">Overnight flight to Melbourne. Sleep as much as you can — the kids will likely crash immediately after a huge trip!</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DAY 10: Return Home -->
+  <div class="day-panel" id="day-10">
+    <div class="weather-bar loading" id="wx-10">⏳ Loading weather data…</div>
+    <div class="day-header" style="background:linear-gradient(135deg,#00C9B1 0%,#87CEEB 100%)">
+      <div class="day-big-num">11</div>
+      <div class="day-title">
+        <h2>Return Home — Sydney!</h2>
+        <p>Friday, 17 July 2026</p>
+      </div>
+      <div class="day-emoji-big">🏠</div>
+    </div>
+    <div class="day-highlights">
+      <div class="hl-chip">🛬 Arrive Melbourne 9:45am</div>
+      <div class="hl-chip">🔄 Transit Melbourne ~2.5hrs</div>
+      <div class="hl-chip">✈️ JQ512 12:30pm → Sydney</div>
+      <div class="hl-chip">🏠 Home 1:55pm</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="time-col"><span>9:45am</span></div>
+        <div class="dot-col"><div class="dot dot-travel">🛬</div></div>
+        <div class="content-col">
+          <div class="event-card type-travel">
+            <div class="tag tag-travel">🛬 Arrival</div>
+            <div class="flight-card">
+              <div><div class="fl-from">PHUKET</div><div class="fl-code">JQ18</div></div>
+              <div class="fl-arrow">──────────▶</div>
+              <div><div class="fl-to">MELBOURNE</div><div class="fl-code">MEL · 9:45am</div></div>
+            </div>
+            <p style="margin-top:10px">Land in Melbourne. Clear immigration, collect bags, clear customs. Allow ~60 min through the terminal, then transfer to domestic T2.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>~11am</span></div>
+        <div class="dot-col"><div class="dot dot-food">☕</div></div>
+        <div class="content-col">
+          <div class="event-card type-food">
+            <div class="tag tag-food">☕ Layover</div>
+            <h4>Melbourne Domestic Terminal — Coffee & Wait</h4>
+            <p>~1.5 hour layover. Grab a proper Melbourne coffee (the best in Australia!), grab some food, and regroup as a gang one final time before you all part ways for Sydney.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>12:30pm</span></div>
+        <div class="dot-col"><div class="dot dot-travel">✈️</div></div>
+        <div class="content-col">
+          <div class="event-card type-travel">
+            <div class="tag tag-travel">✈️ Final Leg</div>
+            <div class="flight-card">
+              <div><div class="fl-from">MELBOURNE</div><div class="fl-code">MEL · 12:30pm</div></div>
+              <div class="fl-arrow">──── JQ512 ────▶</div>
+              <div><div class="fl-to">SYDNEY</div><div class="fl-code">SYD · 1:55pm</div></div>
+              <div class="fl-num">JQ512</div>
+            </div>
+            <p style="margin-top:10px">Short 1h 25min hop home. Almost there!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-col"><span>1:55pm</span></div>
+        <div class="dot-col"><div class="dot dot-hotel">🏠</div></div>
+        <div class="content-col">
+          <div class="event-card type-hotel">
+            <div class="tag tag-hotel">🏠 Home!</div>
+            <h4>Arrive Sydney — Trip Complete! 🎉</h4>
+            <p>You're home. Sun-kissed, slightly sleep-deprived, and absolutely full of memories. Unpacking can wait. The photos need editing. The kids need school excuses. Thailand stole your heart.</p>
+            <div class="tip" style="background:#FFF0E6; border-left:3px solid var(--coral); padding-left:12px">
+              <span class="tip-icon">🌴</span> <strong>Total trip:</strong> 9 nights · 3 families · 1 elephant sanctuary · 1 Phi Phi day · 1 Fantasea night · 1 Big Buddha · 1 Muay Thai fight · 1 ATV jungle run · 1 ping pong show · countless cocktails on Bangla Road. <br><br><strong>Already planning the next one? 😄</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Built with ❤️ for <span>3 amazing families</span> · Phuket, Thailand · July 2026 🌴
+</div>
+
+<script>
+  // ── WEATHER ─────────────────────────────────────────────────────────────
+  // Trip dates: 7 Jul – 17 Jul 2026  (11 days, indices 0–10)
+  // ── WEATHER DATA ─────────────────────────────────────────────────────────
+  // Root cause of file:// failures: browsers send Origin: null from local files.
+  // Open-Meteo rejects null-origin CORS requests even with Access-Control-Allow-Origin: *.
+  // Fix: try direct fetch first (works from http:// / hosted), then fall back to
+  // JSONP via AllOrigins proxy — <script> tags bypass CORS entirely.
+
+  const TRIP_DATES = [
+    '2026-07-07','2026-07-08','2026-07-09','2026-07-10','2026-07-11',
+    '2026-07-12','2026-07-13','2026-07-14','2026-07-15','2026-07-16','2026-07-17'
+  ];
+
+  const PHUKET_WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=7.8804&longitude=98.3923&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Asia%2FBangkok';
+  const MELB_WX_URL   = 'https://api.open-meteo.com/v1/forecast?latitude=-37.8136&longitude=144.9631&forecast_days=16&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,wind_speed_10m_max&timezone=Australia%2FMelbourne';
+  const METNO_PHUKET  = 'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=7.88&lon=98.39';
+  const METNO_MELB    = 'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=-37.81&lon=144.96';
+
+  function wmoToEmoji(code) {
+    if (code === 0)           return { icon: '☀️',  desc: 'Clear sky' };
+    if (code <= 2)            return { icon: '⛅',  desc: 'Partly cloudy' };
+    if (code === 3)           return { icon: '☁️',  desc: 'Overcast' };
+    if (code <= 49)           return { icon: '🌫️', desc: 'Fog / haze' };
+    if (code <= 57)           return { icon: '🌦️', desc: 'Drizzle' };
+    if (code <= 67)           return { icon: '🌧️', desc: 'Rain' };
+    if (code <= 77)           return { icon: '❄️',  desc: 'Snow' };
+    if (code <= 82)           return { icon: '🌦️', desc: 'Rain showers' };
+    if (code <= 84)           return { icon: '🌨️', desc: 'Snow showers' };
+    if (code <= 99)           return { icon: '⛈️',  desc: 'Thunderstorm' };
+    return { icon: '🌡️', desc: 'Unknown' };
+  }
+
+  function rainBar(mm) {
+    if (mm === 0)     return '💧 No rain';
+    if (mm < 5)       return `💧 ${mm.toFixed(1)} mm`;
+    if (mm < 20)      return `🌧️ ${mm.toFixed(1)} mm`;
+    return `⛈️ ${mm.toFixed(1)} mm`;
+  }
+
+  function renderWeather(idx, data) {
+    const bar = document.getElementById('wx-' + idx);
+    if (!bar) return;
+    const { icon, desc } = wmoToEmoji(data.code);
+    const rain = rainBar(data.rain);
+    const city = LOCATIONS[idx].city;
+    bar.classList.remove('loading');
+    bar.innerHTML = `
+      <span class="wx-icon">${icon}</span>
+      <div class="wx-temps">
+        <span class="wx-label">${city} · ${TRIP_DATES[idx].slice(5).replace('-','/')} Jul</span>
+        <span class="wx-high">${Math.round(data.max)}°C</span>
+        <span class="wx-low">Low ${Math.round(data.min)}°C</span>
+      </div>
+      <div class="wx-divider"></div>
+      <span class="wx-desc">${desc}</span>
+      <div class="wx-rain">${rain}</div>
+      <div class="wx-wind">💨 ${Math.round(data.wind)} km/h</div>
+    `;
+  }
+
+  function setWeatherLoading() {
+    for (let i = 0; i <= 10; i++) {
+      const bar = document.getElementById('wx-' + i);
+      if (bar) { bar.classList.add('loading'); bar.innerHTML = '⏳ Loading weather data…'; }
+    }
+    const btn = document.getElementById('wx-refresh-btn');
+    const ts  = document.getElementById('wx-last-updated');
+    if (btn) btn.disabled = true;
+    if (ts)  ts.textContent = 'Fetching latest data…';
+  }
+
+  function setWeatherTimestamp() {
+    const btn = document.getElementById('wx-refresh-btn');
+    const ts  = document.getElementById('wx-last-updated');
+    const now = new Date();
+    const fmt = now.toLocaleString('en-AU', {
+      day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: true,
+      timeZoneName: 'short'
+    });
+    if (ts)  ts.textContent = `Last updated: ${fmt}`;
+    if (btn) btn.disabled = false;
+  }
+
+  function refreshWeather() { setWeatherLoading(); loadWeather(); }
+
+  // ── Render data once fetched ────────────────────────────────────────
+  function processWeatherData(phuket, melb) {
+    TRIP_DATES.forEach((tripDate, panelIdx) => {
+      const data   = panelIdx < 10 ? phuket : melb;
+      const dayIdx = (data.daily && data.daily.time) ? data.daily.time.indexOf(tripDate) : -1;
+      if (dayIdx !== -1) {
+        renderWeather(panelIdx, {
+          max:  data.daily.temperature_2m_max[dayIdx],
+          min:  data.daily.temperature_2m_min[dayIdx],
+          rain: data.daily.precipitation_sum[dayIdx] ?? 0,
+          code: data.daily.weather_code[dayIdx],
+          wind: data.daily.wind_speed_10m_max[dayIdx]
+        });
+      } else {
+        const bar = document.getElementById('wx-' + panelIdx);
+        if (bar) { bar.classList.remove('loading'); bar.innerHTML = '<span class="wx-error">🌡️ Forecast not yet available for this date</span>'; }
+      }
+    });
+    setWeatherTimestamp();
+  }
+
+  // ── Fallback: show live weather links ───────────────────────────────
+  function showWeatherFallback(reason) {
+    for (let i = 0; i <= 10; i++) {
+      const bar = document.getElementById('wx-' + i);
+      if (!bar) continue;
+      bar.classList.remove('loading');
+      const city    = (i === 10) ? 'Melbourne' : 'Phuket';
+      const wxUrl   = `https://wttr.in/${city}`;
+      bar.innerHTML = `<span style="padding:4px 10px;font-size:0.82em;opacity:0.85">
+        🌡️ <a href="${wxUrl}" target="_blank" rel="noopener"
+              style="color:inherit;text-decoration:underline">${city} weather ↗</a>
+      </span>`;
+    }
+    const btn = document.getElementById('wx-refresh-btn');
+    const ts  = document.getElementById('wx-last-updated');
+    if (ts)  ts.textContent = reason ? `Unavailable: ${reason} — try Refresh` : 'Tap Refresh to try again';
+    if (btn) btn.disabled = false;
+  }
+
+  // ── met.no parser → convert to same shape as Open-Meteo daily ──────
+  function metnoSymbolToWmo(symbol) {
+    if (!symbol)                           return 3;
+    if (symbol.includes('clearsky'))       return 0;
+    if (symbol.includes('fair'))           return 1;
+    if (symbol.includes('partlycloudy'))   return 2;
+    if (symbol.includes('cloudy'))         return 3;
+    if (symbol.includes('fog'))            return 45;
+    if (symbol.includes('thunder'))        return 95;
+    if (symbol.includes('sleet'))          return 70;
+    if (symbol.includes('snow'))           return 71;
+    if (symbol.includes('rain') || symbol.includes('shower')) return 61;
+    return 3;
+  }
+
+  async function fetchMetNo(url) {
+    const r = await fetch(url, { headers: { 'User-Agent': 'PhuketFamilyTrip/1.0 github.com' } });
+    if (!r.ok) throw new Error(`met.no HTTP ${r.status}`);
+    const data = await r.json();
+    // Aggregate hourly timeseries into daily buckets (UTC date key)
+    const byDate = {};
+    data.properties.timeseries.forEach(entry => {
+      const dateKey = entry.time.slice(0, 10);
+      const inst    = entry.data.instant.details;
+      const next1   = entry.data.next_1_hours;
+      const next6   = entry.data.next_6_hours;
+      const next12  = entry.data.next_12_hours;
+      const precip  = next1?.details?.precipitation_amount ?? next6?.details?.precipitation_amount ?? 0;
+      const symbol  = next12?.summary?.symbol_code || next6?.summary?.symbol_code || next1?.summary?.symbol_code || '';
+      if (!byDate[dateKey]) byDate[dateKey] = { temps: [], precip: 0, winds: [], symbol: '' };
+      byDate[dateKey].temps.push(inst.air_temperature);
+      byDate[dateKey].precip += precip;
+      byDate[dateKey].winds.push((inst.wind_speed || 0) * 3.6); // m/s → km/h
+      if (!byDate[dateKey].symbol && symbol) byDate[dateKey].symbol = symbol;
+    });
+    const time = [], maxT = [], minT = [], rain = [], wind = [], codes = [];
+    Object.keys(byDate).sort().forEach(d => {
+      const b = byDate[d];
+      time.push(d);
+      maxT.push(Math.max(...b.temps));
+      minT.push(Math.min(...b.temps));
+      rain.push(b.precip);
+      wind.push(Math.max(...b.winds));
+      codes.push(metnoSymbolToWmo(b.symbol));
+    });
+    return { daily: { time, temperature_2m_max: maxT, temperature_2m_min: minT,
+                      precipitation_sum: rain, weather_code: codes, wind_speed_10m_max: wind } };
+  }
+
+  // ── Main loader ─────────────────────────────────────────────────────
+  async function withTimeout(promise, ms) {
+    return Promise.race([
+      promise,
+      new Promise((_, rej) => setTimeout(() => rej(new Error(`timeout after ${ms/1000}s`)), ms))
+    ]);
+  }
+
+  async function loadWeather() {
+    // Strategy 1: met.no (Norwegian Met Office) — free, no key, very reliable
+    try {
+      const [phuket, melb] = await withTimeout(
+        Promise.all([fetchMetNo(METNO_PHUKET), fetchMetNo(METNO_MELB)]),
+        20000
+      );
+      processWeatherData(phuket, melb);
+      return;
+    } catch(err) {
+      console.warn('Weather strategy 1 (met.no) failed:', err.message);
+    }
+
+    // Strategy 2: Open-Meteo direct with explicit AbortSignal
+    const controller = new AbortController();
+    try {
+      const [r1, r2] = await withTimeout(
+        Promise.all([
+          fetch(PHUKET_WX_URL, { signal: controller.signal }),
+          fetch(MELB_WX_URL,   { signal: controller.signal })
+        ]),
+        20000
+      );
+      if (!r1.ok) throw new Error(`HTTP ${r1.status}`);
+      if (!r2.ok) throw new Error(`HTTP ${r2.status}`);
+      const [phuket, melb] = await Promise.all([r1.json(), r2.json()]);
+      if (!phuket.daily) throw new Error('No daily data');
+      processWeatherData(phuket, melb);
+      return;
+    } catch(err) {
+      controller.abort(); // Cancel any still-pending fetches
+      console.warn('Weather strategy 2 (Open-Meteo) failed:', err.message);
+    }
+
+    // Strategy 3: wttr.in fallback links
+    showWeatherFallback('All APIs unavailable');
+  }
+
+  loadWeather();
+  // ────────────────────────────────────────────────────────────────────────
+
+  // ── ACCORDION + DAY REORDER ────────────────────────────────────────────
+  const DAY_DATES = [
+    '2026-07-07','2026-07-08','2026-07-09','2026-07-10','2026-07-11',
+    '2026-07-12','2026-07-13','2026-07-14','2026-07-15','2026-07-16','2026-07-17'
+  ];
+
+  function toggleDay(panel) {
+    panel.classList.toggle('acc-open');
+    panel.querySelector('.day-header').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function initAccordion() {
+    const container = document.querySelector('.day-panels');
+    const panels    = Array.from(document.querySelectorAll('.day-panel'));
+
+    panels.forEach((panel, i) => {
+      // Tag with date
+      panel.dataset.date = DAY_DATES[i];
+
+      // Wrap highlights + timeline inside .acc-body
+      const body = document.createElement('div');
+      body.className = 'acc-body';
+      const highlights = panel.querySelector('.day-highlights');
+      const timeline   = panel.querySelector('.timeline');
+      if (highlights) body.appendChild(highlights);
+      if (timeline)   body.appendChild(timeline);
+      panel.appendChild(body);
+
+      // Make header clickable + add chevron
+      const header = panel.querySelector('.day-header');
+      if (header) {
+        const chev = document.createElement('span');
+        chev.className = 'acc-chevron';
+        chev.textContent = '▼';
+        header.appendChild(chev);
+        header.addEventListener('click', () => toggleDay(panel));
+      }
+    });
+
+    reorderDays(panels, container);
+  }
+
+  function reorderDays(panels, container) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const past = [], present = [], future = [];
+
+    panels.forEach(panel => {
+      const d = new Date(panel.dataset.date);
+      d.setHours(0, 0, 0, 0);
+      const diff = d - today;
+      if (diff < 0)        past.push(panel);
+      else if (diff === 0) present.push(panel);
+      else                 future.push(panel);
+    });
+
+    // Render order: today first, then future days, then past days at bottom
+    const ordered = [...present, ...future, ...past];
+    ordered.forEach(p => container.appendChild(p));
+
+    // Reset states
+    panels.forEach(p => p.classList.remove('acc-open', 'acc-today', 'acc-past'));
+
+    // Mark past
+    past.forEach(p => {
+      p.classList.add('acc-past');
+      const h2 = p.querySelector('.day-title h2');
+      if (h2 && !h2.querySelector('.past-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'past-badge';
+        badge.textContent = 'Completed';
+        h2.appendChild(badge);
+      }
+    });
+
+    // Mark today (highlight border) but keep closed
+    if (present.length > 0) {
+      present.forEach(p => {
+        p.classList.add('acc-today');
+        const h2 = p.querySelector('.day-title h2');
+        if (h2 && !h2.querySelector('.today-badge')) {
+          const badge = document.createElement('span');
+          badge.className = 'today-badge';
+          badge.textContent = '📍 Today';
+          h2.appendChild(badge);
+        }
+      });
+    }
+    // All days stay closed on load — user opens manually
+  }
+
+  // Run after DOM is ready
+  initAccordion();
+</script>
+
+</body>
+</html>
